@@ -10,15 +10,14 @@ package prototipo.proyectofinal;
  * @author juanj
  */
 public class Apto {
-    String torre;
-    int num;
-    String propietario;
-    Double idPropietario;
-    Residente residente;
-    boolean isArrendado;
+    private String torre;
+    private int num;
+    private String propietario;
+    private Double idPropietario;
+    private Residente residente;
+    private boolean isArrendado;
     
     //Constructores
-
     public Apto() {
     }
 
