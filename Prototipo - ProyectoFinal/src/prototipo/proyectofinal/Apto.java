@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package prototipo.proyectofinal;
 
-/**
- *
- * @author juanj
- */
 public class Apto {
     private String torre;
     private int num;
@@ -16,6 +7,7 @@ public class Apto {
     private Double idPropietario;
     private Residente residente;
     private boolean isArrendado;
+    private Visitante[] visitasDeHoy;
     
     //Constructores
     public Apto() {
@@ -79,5 +71,12 @@ public class Apto {
     public void setIsArrendado(boolean isArrendado) {
         this.isArrendado = isArrendado;
     }
-    
+
+    public Visitante[] getVisitasDeHoy() {
+        return visitasDeHoy;
+    }
+
+    public void setVisitasDeHoy(Visitante[] visitasDeHoy) {
+        this.visitasDeHoy = visitasDeHoy;
+    }
 }

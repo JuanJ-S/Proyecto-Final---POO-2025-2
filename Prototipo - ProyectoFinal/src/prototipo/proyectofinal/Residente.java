@@ -1,16 +1,17 @@
 package prototipo.proyectofinal;
 import java.util.Scanner;
 
-//Residente del conjunto
 public class Residente extends Usuario{
     private Apto apartamento;
     private String nombre;
     private Scanner scanner;
+    private Paquete[] paquetesPendientes;
+    private Visitante[] visitasPendientes;
     
     //Métodos Personalizados
-    public boolean aprobarVisitante(){
-        //El residente puede dejar entrar o no dejar entrar a la visita notificada
+    public boolean aprobarVisitante(Visitante visitante){ //Aprobar o no la entrada de un vivistante
         boolean isAprobado = false;
+        System.out.println("Nueva visita: "+"Datos de la Visita");
         System.out.println("Desea aprobar la visita? (1. si, 2. no)");
         int desicion = scanner.nextInt();
         switch(desicion){
@@ -22,10 +23,11 @@ public class Residente extends Usuario{
                 System.out.print("Opción Invalida");
         }
         return isAprobado;
+        //Cambiar isAprobado en Visitante
     }
     
     public void consultarVisitas(){
-        //El residente puede consultar las visitas de la semana de su apto
+        //Consultar la lista de visitas hechas hoy al apto
         System.out.print("Visitas Vistas :D");
     }
 
@@ -62,4 +64,21 @@ public class Residente extends Usuario{
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public Paquete[] getPaquetes() {
+        return paquetesPendientes;
+    }
+
+    public void setPaquetes(Paquete[] paquetesPendientes) {
+        this.paquetesPendientes = paquetesPendientes;
+    }
+
+    public Visitante[] getVisitas() {
+        return visitasPendientes;
+    }
+
+    public void setVisitas(Visitante[] visitas) {
+        this.visitasPendientes = visitas;
+    }
+    
 }

@@ -1,19 +1,15 @@
 package prototipo.proyectofinal;
 
-//Encargado de registrar la salida y entrada de visitas, ademas de los paquetes
 public class Vigilante extends Usuario{
     //Métodos Personalizados
-    public void notificarEntrante(Entrante entrante){
-        //Notificar al destino de la visita/paquete
-        System.out.println("Entrante");
+    public void notificarEntrante(Entrante entrante){ //Notificar Visita/Paquete al Residente
+        entrante.notificarLlegada(); //Llama a notificarLlegada del entrante
     }
-    public void registrarEntrante(Entrante entrante){
-        //Registrar el entrante en la base de datos, si es visita debe ser aprobada por el destino primero
-        System.out.println("Entrante Registrado");
+    public void registrarEntrante(Entrante entrante){ //Registra Visita/Paquete en el Sistema
+        entrante.registrarEntrada(); //Llama a registrarEntrada del entrante
     }
-    public void registrarSalida(Entrante entrante){
-        //Registrar hora de salida de la visita
-        System.out.println("Saliente");
+    public void registrarSalida(Entrante entrante){ //Registra Salida o Entrega del Entrante
+        System.out.println("Saliente"); //Llamar a la funcion registrarSalida
     }
 
     //Acceso al Sistema - Herencia

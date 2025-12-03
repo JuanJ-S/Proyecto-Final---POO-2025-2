@@ -14,15 +14,16 @@ public class Visitante extends Entrante{
     private String nombre;
     private LocalDateTime horaDeEntrada;
     private LocalDateTime horaDeSalida;
+    private boolean isAprobado = false;
     
     //Métodos Personalizados
     public void notificar(){
-        //Notifica su llegada al destino
+        //Notifica su llegada al destino y se agrega a visitasPendientes
         System.out.println("Visitante");
         registrar();
     }
     private void registrar(){
-        //Registra sus datos en el sistema del conjunto
+        //Registra sus datos en la BD en VisitasdeHoy de Apto
         System.out.println("Visitante Registrado");
     }
     
@@ -55,5 +56,12 @@ public class Visitante extends Entrante{
     public void setHoraDeSalida(LocalDateTime horaDeSalida) {
         this.horaDeSalida = horaDeSalida;
     }
-    
+
+    public boolean isIsAprobado() {
+        return isAprobado;
+    }
+
+    public void setIsAprobado(boolean isAprobado) {
+        this.isAprobado = isAprobado;
+    }
 }

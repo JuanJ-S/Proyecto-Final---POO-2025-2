@@ -2,11 +2,12 @@ package prototipo.proyectofinal;
 
 //Clase Abstracta para el tipo de usuario del sistema
 public abstract class Usuario {
-    private int id;
-    private String Contraseña;
+    private int id; //Identificación del Ususario en el Sistema
+    private String Contraseña; //Contraseña del usuario para acceder al sistema
     
-    public abstract void iniciarSesion();
-    public abstract void cerrarSesion();
+    public abstract void iniciarSesion(); ////Se recibe un id y se busca en la base de datos, si esta en la BD se compara la constraseña dada con la relacionada al id
+        //Si ambos datos dados coinciden, se le da acceso al Ususario al sistema
+    public abstract void cerrarSesion(); //Se cierra el acceso al sistema
     
     //Constructores
     public Usuario() {
