@@ -1,5 +1,7 @@
 package prototipo.proyectofinal;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Residente extends Usuario implements ConsultarBD{
     private int idResidente;
@@ -9,8 +11,10 @@ public class Residente extends Usuario implements ConsultarBD{
     //Métodos personalizados
     public void aprobarVisita(int idApto){ //Esto va en ventana
         int opcion = 0;
+        List<List<String>> visitasPendientes = new ArrayList<>(); 
         System.out.println("Ingresa el ID del visitante que quieras aprobar: ");
-        BaseDeDatos.consultarVisitasPendientes(idApto);
+        visitasPendientes = BaseDeDatos.consultarVisitasPendientes(idApto);
+        System.out.println(visitasPendientes);
         opcion = scanner.nextInt();
         BaseDeDatos.aprobarVisita(idApto, opcion);
     }
@@ -46,12 +50,14 @@ public class Residente extends Usuario implements ConsultarBD{
 
     @Override
     public void consultarVisitantes() {
-        BaseDeDatos.consultarVisitantes(idApto);
+        List<List<String>> visitantes = new ArrayList<>();
+        visitantes = BaseDeDatos.consultarVisitantes(idApto, true);
     }
 
     @Override
     public void consultarPaquetes() {
-        BaseDeDatos.consultarPaquetes(idApto);
+        List<List<String>> paquetes = new ArrayList<>();
+        paquetes = BaseDeDatos.consultarPaquetes(idApto);
     }
     
     //Constructores

@@ -1,6 +1,8 @@
 package prototipo.proyectofinal;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseDeDatos {
     private static String url = "jdbc:mysql://localhost:3306/conjunto";
@@ -104,22 +106,29 @@ public class BaseDeDatos {
     }
     
     //Funciones de residente
-    public static void consultarVisitasPendientes(int idApto){
+    public static List<List<String>> consultarVisitasPendientes(int idApto){
+        List<List<String>> visitasPendientes = new ArrayList<>(); //Lista de Retorno
+        List<String> registro = new ArrayList<>(); //Guardara cada Registro devuelto
         int contador = 0; //Contador de Visitas
         String sql = "Select * from visitante where idDestino = ? and isAprobado = 0";//Comando SQL
         try(Connection con = DriverManager.getConnection(url, user, password);
-        PreparedStatement ps = con.prepareStatement(sql);){
+        PreparedStatement ps = con.prepareStatement(sql);){ //Conexion y preCarga del comando
             ps.setInt(1, idApto); //Reemplazar ? por idApto
-            ResultSet rs = ps.executeQuery(); //Guardar retorno
+            ResultSet rs = ps.executeQuery(); //Guardar retorno del mySql
             while(rs.next()){ //Recorrer registros
                 contador++;
-                System.out.print(contador+") idVisitante: "+rs.getInt(2));
-                System.out.print(" | Nombres: "+rs.getString(3));
-                System.out.print(" | Apellidos: "+rs.getString(4)+" | \n");
+                //Guardamos el Registro en el siguente orden: Contador,IDVisitante,Nombres,Apellidos
+                registro.add(String.valueOf(contador));
+                registro.add(String.valueOf(rs.getInt(2)));
+                registro.add(rs.getString(3));
+                registro.add(rs.getString(4));
+                visitasPendientes.add(registro); //Guardamos el registro en la lista de retorno
+                registro.clear(); //Limpiamos registro para el siguiente bucle
             }
         } catch(Exception e){
             System.out.println("Error inesperado: "+e);
         }
+        return visitasPendientes;
     }
     
     public static void aprobarVisita(int idApto, int opcion){
@@ -135,47 +144,148 @@ public class BaseDeDatos {
         System.out.print("Se aprobo la visita del visitante con ID: "+opcion);
     }
     
-    public static void consultarVisitantes(int idDestino){
-        String sql = "select * from visitante where idDestino = ? and isAprobado = 1";
+    public static List<List<String>> consultarVisitantes(int idDestino, boolean isAprobado){
+        List<List<String>> consulta = new ArrayList<>(); //Variable de Retorno
+        List<String> registro = new ArrayList<>();
+        String sql = "select * from visitante where idDestino = ? and isAprobado = ?";
         int contador = 0;
         try(Connection con = DriverManager.getConnection(url,user,password);
         PreparedStatement ps = con.prepareStatement(sql);){
             ps.setInt(1, idDestino);
+            ps.setBoolean(2, isAprobado);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 contador++;
-                System.out.print(contador+" | iD: "+rs.getInt(2));
-                System.out.print(" | Nombres: "+rs.getString(3));
-                System.out.print(" | Apellidos: "+rs.getString(4));
-                System.out.print(" | Fecha De Entrada: "+rs.getObject(7, LocalDateTime.class));
-                System.out.print(" | Fecha de Salida: "+rs.getObject(8, LocalDateTime.class)+"\n");
+                //Guardamos los valores de registro en el siguiente orden: ID, Nombres, Apellidos, Fecha de Entrada, Fecha de Salida
+                registro.add(String.valueOf(contador));
+                registro.add(String.valueOf(rs.getInt(2)));
+                registro.add(rs.getString(3));
+                registro.add(rs.getString(4));
+                registro.add(String.valueOf(rs.getObject(7, LocalDateTime.class)));
+                registro.add(String.valueOf(rs.getObject(8, LocalDateTime.class)));
+                consulta.add(registro); //Guardamos el registro en consulta
+                registro.clear();
             }
         } catch(Exception e){
             System.out.println("Algo Salio mal\n"+e);
         }
+        return consulta;
     }
     
-    public static void consultarPaquetes(int idDestino){
-        String sql = "select * from paquete where idDestino = ?";
+    public static List<List<String>> consultarPaquetes(int idDestino){
+        List<List<String>> paquetes = new ArrayList<>(); //Lsita de Retorno
+        List<String> registro = new ArrayList<>(); //Variable de Registros
+        String sql = "select * from paquete where idDestino = ?"; //Comando sql
         int contador = 0;
+        try(Connection con = DriverManager.getConnection(url,user,password); //Conectar con BD
+        PreparedStatement ps = con.prepareStatement(sql);){//Preparar comando
+            ps.setInt(1, idDestino); //Reemplazar ?
+            ResultSet rs = ps.executeQuery(); //Guardar Retorno
+            while(rs.next()){ //Recorrer Retorno - Guardar en el orden: Remitente, Destinatario, isEntregado, FechaLlegada, FechaEntrega
+                contador++;
+                registro.add(rs.getString(2));
+                registro.add(rs.getString(3));
+                registro.add(String.valueOf(rs.getBoolean(5)));
+                registro.add(String.valueOf(rs.getObject(7, LocalDateTime.class)));
+                registro.add(String.valueOf(rs.getObject(8, LocalDateTime.class)));
+                paquetes.add(registro); //Agregar registro a paquete
+                registro.clear(); //Limppiar registro para el siguiente buccle
+            }
+        } catch(Exception e){
+            System.out.println("Algo Salio mal\n"+e);
+        }
+        return paquetes;
+    }
+    
+    //Métodos de Admin
+    public static int idApto(int torre, int numero){
+        int idApto = 0;
+        String sql = "select * from apto where torre = ? and numero = ?";
+        try(Connection con = DriverManager.getConnection(url,user,password);
+         PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, torre);
+            ps.setInt(2, numero);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                idApto = rs.getInt(1);
+            }
+        } catch(Exception e){
+            System.out.println("El apartamento no existe o hay un error en el programa");
+        }
+        return idApto;
+    }
+    
+    public static String consultarVisitantes(int idDestino){
+        String retorno = "";
+        int contador = 0;
+        String sql = "Select * from visitante where idDestino = ?";
         try(Connection con = DriverManager.getConnection(url,user,password);
         PreparedStatement ps = con.prepareStatement(sql);){
             ps.setInt(1, idDestino);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 contador++;
-                System.out.print(contador+" | Remitente: "+rs.getString(2));
-                System.out.print(" | Destinatario: "+rs.getString(3));
-                System.out.print(" | Entregado: "+rs.getBoolean(5));
-                System.out.print(" | Fecha De Llegada: "+rs.getObject(7, LocalDateTime.class));
-                if(rs.getBoolean(5)){
-                    System.out.print(" | Fecha de Entrega: "+rs.getObject(8, LocalDateTime.class)+"\n");
-                } else{
-                    System.out.println("| No ha sido Entregado\n");
-                }
+                retorno += contador+" | ID: "+rs.getInt(2);
+                retorno += " | Nombres: "+rs.getString(3)+" | Apellidos: "+rs.getString(4);
+                retorno += " | Fecha De Entrada"+rs.getObject(7, LocalDateTime.class)+" | Fecha De Salida: "+rs.getObject(8, LocalDateTime.class)+"\n";
             }
         } catch(Exception e){
-            System.out.println("Algo Salio mal\n"+e);
+            System.out.println("El apto ingresado no tiene visitas");
         }
+        return retorno;
+    }
+    
+    public static String consultarApto(int idApto){
+        String retorno = "";
+        String sql = "Select * from apto where idApto = ?";
+        try(Connection con = DriverManager.getConnection(url,user,password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, idApto);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                retorno += " | ID: "+rs.getInt(1);
+                retorno += " | Torre: "+rs.getInt(2)+" | Número: "+rs.getInt(3);
+                retorno += " | Propietario: "+rs.getString(4)+" | ID Propietario: "+rs.getInt(5);
+                retorno += " | isArrendado: "+rs.getBoolean(6);
+            }
+        } catch(Exception e){
+            System.out.println("El apto ingresado no exite");
+        }
+        return retorno;
+    }
+    
+    public static String consultarResidente(int idApto){
+        String retorno = "";
+        String sql = "Select * from residente where idApto = ?";
+        try(Connection con = DriverManager.getConnection(url,user,password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, idApto);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                retorno += " | Nombres: "+rs.getString(1)+" | Apellidos: "+rs.getString(2);
+                retorno += " | ID: "+rs.getInt(3);
+            }
+        } catch(Exception e){
+            System.out.println("El apto ingresado no exite");
+        }
+        return retorno;
+    }
+    
+    public static String registrarApto(int torre, int numero, String propietario, int idPropietario, boolean isArrendado){
+        String confirmacion = "";
+        String sql = "insert into apto values(null,?,?,?,?,?)";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, torre);
+            ps.setInt(2, numero);
+            ps.setString(3, propietario);
+            ps.setInt(4, idPropietario);
+            ps.setBoolean(5, isArrendado);
+            ps.executeUpdate();
+            confirmacion += "Se registro el apartamento correctamente";
+        } catch(Exception e){
+            confirmacion += "Error al registrar vuelve a intentarlo"+e;
+        }
+        return confirmacion;
     }
 }

@@ -2,17 +2,51 @@ package prototipo.proyectofinal;
 import java.util.Scanner;
 
 public class Administrador extends Usuario implements ConsultarBD{
-    
+    Scanner scanner = new Scanner(System.in);
     //Métodos Personalizados
     
     public void consultarApto(){
-        throw new UnsupportedOperationException("ConsultarApto Not supported yet.");
+        int torre = 0;
+        int numero = 0;
+        int idApto = 0;
+        System.out.print("Digita el numero de torre: ");
+        torre = scanner.nextInt();
+        System.out.print("\nDigita el numero del apartamento: ");
+        numero = scanner.nextInt();
+        idApto = BaseDeDatos.idApto(torre, numero);
+        BaseDeDatos.consultarApto(idApto);
     }
     public void consultarResidente(){
-        throw new UnsupportedOperationException("ConsultarResidente Not supported yet.");
+        int torre = 0;
+        int numero = 0;
+        int idApto = 0;
+        System.out.print("Digita el numero de torre: ");
+        torre = scanner.nextInt();
+        System.out.print("\nDigita el numero del apartamento: ");
+        numero = scanner.nextInt();
+        idApto = BaseDeDatos.idApto(torre, numero);
+        BaseDeDatos.consultarResidente(idApto);
     }
     public void registrarApto(){
-        throw new UnsupportedOperationException("RegistrarApto Not supported yet.");
+        int torre = 0;
+        int numero = 0;
+        String propietario = "";
+        int idPropietario = 0;
+        int opcion = 0;
+        boolean isArrendado = false;
+        System.out.print("Ingresa el numero de torre del Apto: ");
+        torre = scanner.nextInt();
+        System.out.print("\nIngresa el numero del Apto: ");
+        numero = scanner.nextInt();
+        System.out.print("\n¿El Apartamento esta arrendado?: \n\t1.Si\n\t2.No\n");
+        opcion = scanner.nextInt();
+        System.out.print("\nIngresa el nombre completo del propietario: ");
+        scanner.nextLine();
+        propietario = scanner.next();
+        System.out.print("\nIngresa el ID del propietario: ");
+        idPropietario = scanner.nextInt();
+        if(opcion == 1){isArrendado = true;} else{isArrendado = false;}
+        System.out.println(BaseDeDatos.registrarApto(torre, numero, propietario, idPropietario, isArrendado));
     }
     public void registrarResidente(){
         throw new UnsupportedOperationException("registrarResidente Not supported yet.");
@@ -55,12 +89,28 @@ public class Administrador extends Usuario implements ConsultarBD{
     
     @Override
     public void consultarVisitantes() {
-        throw new UnsupportedOperationException("ConsultarVisitantes Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int torre = 0;
+        int numero = 0;
+        int idDestino = 0;
+        System.out.print("Digita el numero de torre: ");
+        torre = scanner.nextInt();
+        System.out.print("\nDigita el numero del apartamento: ");
+        numero = scanner.nextInt();
+        idDestino = BaseDeDatos.idApto(torre, numero);
+        BaseDeDatos.consultarVisitantes(idDestino);
     }
 
     @Override
     public void consultarPaquetes() {
-        throw new UnsupportedOperationException("Consultar Paquetes Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int torre = 0;
+        int numero = 0;
+        int idDestino = 0;
+        System.out.print("Digita el numero de torre: ");
+        torre = scanner.nextInt();
+        System.out.print("\nDigita el numero del apartamento: ");
+        numero = scanner.nextInt();
+        idDestino = BaseDeDatos.idApto(torre, numero);
+        BaseDeDatos.consultarPaquetes(idDestino);
     }
     
     //Contructores
