@@ -4,10 +4,15 @@ import java.util.Scanner;
 public class Residente extends Usuario implements ConsultarBD{
     private int idResidente;
     private int idApto;
+    private Scanner scanner = new Scanner(System.in);
     
     //Métodos personalizados
-    public void aprobarVisita(){
-        throw new UnsupportedOperationException("aprobarVisita Not supported yet.");
+    public void aprobarVisita(int idApto){ //Esto va en ventana
+        int opcion = 0;
+        System.out.println("Ingresa el ID del visitante que quieras aprobar: ");
+        BaseDeDatos.consultarVisitasPendientes(idApto);
+        opcion = scanner.nextInt();
+        BaseDeDatos.aprobarVisita(idApto, opcion);
     }
     
     //Métodos Heredados
@@ -21,7 +26,7 @@ public class Residente extends Usuario implements ConsultarBD{
             opcion = scanner.nextInt();
             switch(opcion){
                 case 1:
-                    aprobarVisita();
+                    aprobarVisita(idApto);
                     break;
                 case 2:
                     consultarVisitantes();
@@ -36,17 +41,17 @@ public class Residente extends Usuario implements ConsultarBD{
                     System.out.println("Opcion invalida, Elije una de las opciones disponibles");
                     break;
             }
-        }while(true);
+        }while(opcion != 4);
     }
 
     @Override
     public void consultarVisitantes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BaseDeDatos.consultarVisitantes(idApto);
     }
 
     @Override
     public void consultarPaquetes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BaseDeDatos.consultarPaquetes(idApto);
     }
     
     //Constructores

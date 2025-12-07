@@ -34,6 +34,7 @@ public class PrototipoProyectoFinal{
                 rol = elegirRol();
             }
         }while(acceso==false);
+        System.out.println("Se ha iniciado Sesion");
         //Crear objeto y acceder a menu de funciones
         if(usuario instanceof Residente){
             Residente residente = BaseDeDatos.construirResidente(idSesion);
