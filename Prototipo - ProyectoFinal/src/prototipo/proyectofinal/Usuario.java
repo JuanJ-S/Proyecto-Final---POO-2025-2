@@ -12,7 +12,9 @@ public abstract class Usuario{
         boolean acceso = BaseDeDatos.inicioSesion(idSesion, contraseña, rol);
         return acceso;
     }
-    public void cerrarSesion(){}
+    public void cerrarSesion(){
+        System.out.println("Se ha cerrado Sesion");
+    }
     
     public abstract void menu(Scanner scanner);
     

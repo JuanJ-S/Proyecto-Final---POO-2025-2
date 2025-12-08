@@ -1,4 +1,6 @@
 package prototipo.proyectofinal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Administrador extends Usuario implements ConsultarBD{
@@ -6,6 +8,7 @@ public class Administrador extends Usuario implements ConsultarBD{
     //Métodos Personalizados
     
     public void consultarApto(){
+        List<String> apto = new ArrayList<>();
         int torre = 0;
         int numero = 0;
         int idApto = 0;
@@ -14,9 +17,10 @@ public class Administrador extends Usuario implements ConsultarBD{
         System.out.print("\nDigita el numero del apartamento: ");
         numero = scanner.nextInt();
         idApto = BaseDeDatos.idApto(torre, numero);
-        BaseDeDatos.consultarApto(idApto);
+        apto = BaseDeDatos.consultarApto(idApto);
     }
     public void consultarResidente(){
+        List<String> residente = new ArrayList<>();
         int torre = 0;
         int numero = 0;
         int idApto = 0;
@@ -25,7 +29,7 @@ public class Administrador extends Usuario implements ConsultarBD{
         System.out.print("\nDigita el numero del apartamento: ");
         numero = scanner.nextInt();
         idApto = BaseDeDatos.idApto(torre, numero);
-        BaseDeDatos.consultarResidente(idApto);
+        residente = BaseDeDatos.consultarResidente(idApto);
     }
     public void registrarApto(){
         int torre = 0;
@@ -49,7 +53,22 @@ public class Administrador extends Usuario implements ConsultarBD{
         System.out.println(BaseDeDatos.registrarApto(torre, numero, propietario, idPropietario, isArrendado));
     }
     public void registrarResidente(){
-        throw new UnsupportedOperationException("registrarResidente Not supported yet.");
+        String nombres = null;
+        String apellidos = null;
+        String contraseña = null;
+        int idResidente = 0;
+        int idApto = 0;
+        System.out.print("Ingresa los nombres del Residente: ");
+        nombres = scanner.next();
+        System.out.print("Ingresa los apellidos del Residente: ");
+        nombres = scanner.next();
+        System.out.print("Ingresa la contraseña de sesion del residente: ");
+        contraseña = scanner.next();
+        System.out.print("Ingresa el ID del residente: ");
+        idResidente = scanner.nextInt();
+        System.out.print("Ingresa el ID del apartamento del residente: ");
+        idApto = scanner.nextInt();
+        BaseDeDatos.registrarUsuario(nombres, apellidos, 2, contraseña);
     }
     
     //Métodos Heredados
@@ -89,6 +108,7 @@ public class Administrador extends Usuario implements ConsultarBD{
     
     @Override
     public void consultarVisitantes() {
+        List<List<String>> visitantes = new ArrayList<>();
         int torre = 0;
         int numero = 0;
         int idDestino = 0;
@@ -97,11 +117,12 @@ public class Administrador extends Usuario implements ConsultarBD{
         System.out.print("\nDigita el numero del apartamento: ");
         numero = scanner.nextInt();
         idDestino = BaseDeDatos.idApto(torre, numero);
-        BaseDeDatos.consultarVisitantes(idDestino);
+        visitantes = BaseDeDatos.consultarVisitantes(idDestino);
     }
 
     @Override
     public void consultarPaquetes() {
+        List<List<String>> paquetes = new ArrayList<>();
         int torre = 0;
         int numero = 0;
         int idDestino = 0;
@@ -110,7 +131,7 @@ public class Administrador extends Usuario implements ConsultarBD{
         System.out.print("\nDigita el numero del apartamento: ");
         numero = scanner.nextInt();
         idDestino = BaseDeDatos.idApto(torre, numero);
-        BaseDeDatos.consultarPaquetes(idDestino);
+        paquetes = BaseDeDatos.consultarPaquetes(idDestino);
     }
     
     //Contructores
