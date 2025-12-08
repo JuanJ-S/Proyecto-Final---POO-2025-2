@@ -1,6 +1,6 @@
 package prototipo.proyectofinal;
 import java.time.LocalDateTime;
-import java.util.scanner;
+import java.util.Scanner;
 
 public class Visitante implements Entrante{
 Scanner scanner = new Scanner(System.in);
@@ -26,7 +26,7 @@ Scanner scanner = new Scanner(System.in);
     public void notificarLlegada() {
         System.out.println("Notificando llegada de visitante...");
         fechaDeEntrada = LocalDateTime.now();
-    }    }
+    }   
 
     @Override
     public void registrar() {
