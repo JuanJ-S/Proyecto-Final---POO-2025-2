@@ -310,4 +310,70 @@ public class BaseDeDatos {
             System.out.println("Error al registrar residente: "+e);
         }
     }
+// registro de visitantes
+   public static void registrarVisitante(String nombres, String apellidos, int idDestino, int idSistema){
+        String sql = "INSERT INTO visitante VALUES (NULL, NULL, ?, ?, ?, 0, ?, NULL)";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setString(1, nombres);
+            ps.setString(2, apellidos);
+            ps.setInt(3, idDestino);
+            ps.setObject(4, LocalDateTime.now());
+            ps.executeUpdate();
+            System.out.println("Visitante registrado correctamente");
+        } catch(Exception e){
+            System.out.println("Error al registrar visitante: "+e);
+        }
+    }
+
+    public static void registrarSalidaVisitante(int idVisitante){
+        String sql = "UPDATE visitante SET fechaSalida = ? WHERE idVisitante = ?";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setObject(1, LocalDateTime.now());
+            ps.setInt(2, idVisitante);
+            ps.executeUpdate();
+            System.out.println("Salida del visitante registrada.");
+        } catch(Exception e){
+            System.out.println("Error al registrar salida: "+e);
+        }
+    }
+//registro de paquete
+public static void registrarPaquete(String remitente, String destinatario, int idDestino){
+    String sql = "INSERT INTO paquete VALUES (?, ?, ?, ?, 0, NULL, ?, NULL)";
+
+    try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql)){
+
+        ps.setInt(1, generarIdSistema());  // si tú ya generas el idSistema así
+        ps.setString(2, remitente);
+        ps.setString(3, destinatario);
+        ps.setInt(4, idDestino);
+        ps.setObject(5, LocalDateTime.now()); // fechaLlegada
+
+        ps.executeUpdate();
+        System.out.println("Paquete registrado correctamente.");
+
+    } catch(Exception e){
+        System.out.println("Error al registrar paquete: " + e);
+    }
+}
+//registro de entrega de paquete
+public static void registrarEntregaPaquete(int idPaquete){
+    String sql = "UPDATE paquete SET isEntregado = 1, fechaSalida = ? WHERE idPaquete = ?";
+
+    try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql)){
+
+        ps.setObject(1, LocalDateTime.now());
+        ps.setInt(2, idPaquete);
+
+        ps.executeUpdate();
+        System.out.println("Entrega del paquete registrada.");
+
+    } catch(Exception e){
+        System.out.println("Error al registrar entrega: " + e);
+    }
+}
+
 }
