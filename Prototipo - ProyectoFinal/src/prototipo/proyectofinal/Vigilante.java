@@ -20,8 +20,15 @@ public class Vigilante extends Usuario{
         }
         entrante.notificarLlegada();
     }
+    //Adiccion de nueva funcion de los metodos- vigilante registra la salida del visitante
     public void registrarSalida(){
-        throw new UnsupportedOperationException("RegistrarSalida Not supported yet.");
+        system.out.print("ID del visitante para registrar salida: ");
+        int id= scanner.nextInt();
+        scanner.nextLine();
+
+        Visitante v = new Visitante();
+        V.setIdVisitante(id);
+        V.registrarSalida();
     }
     public void registrarEntrega(){
         throw new UnsupportedOperationException("RegistrarEntrega Not supported yet.");
@@ -31,8 +38,16 @@ public class Vigilante extends Usuario{
     public void menu(Scanner scanner){
         int opcion = 0;
         do{
-            System.out.println("¿Que quieres hacer?: \n\t1.Notificar Entrante\n\t2.Registrar Salida\n\t3.Registrar Entrega\n\t4.Cerrar Sesion");
+    //orden en el system.out
+            System.out.println("\n=== MENU VIGILANTE ===");
+            System.out.println("1. Notificar Entrante");
+            System.out.println("2. Registrar Salida");
+            System.out.println("3. Registrar Entrega");
+            System.out.println("4. Cerrar Sesión");
+            System.out.print("Opcion: ");
+            
             opcion = scanner.nextInt();
+            scanner.nextLine();
             switch(opcion){
                 case 1:
                     notificarEntrante();

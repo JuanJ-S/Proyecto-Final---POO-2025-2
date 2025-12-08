@@ -1,7 +1,10 @@
 package prototipo.proyectofinal;
 import java.time.LocalDateTime;
+import java.util.scanner;
 
 public class Visitante implements Entrante{
+Scanner scanner = new Scanner(System.in);
+
     private int idSistema;
     private int idVisitante;
     private String nombres;
@@ -12,20 +15,28 @@ public class Visitante implements Entrante{
     private LocalDateTime fechaDesalida;
     
     //Métodos personalizados
+    //adiccion de prints en cada metodo para q no lance errores
     public void registrarSalida(){
-        throw new UnsupportedOperationException("registrarSalida Not supported yet.");
-    }
+        System.out.println("Registrando salida del visitante con ID: " + idVisitante);
+        fechaDesalida = LocalDateTime.now();    }
     
     //Métodos Heredados
 
     @Override
     public void notificarLlegada() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        System.out.println("Notificando llegada de visitante...");
+        fechaDeEntrada = LocalDateTime.now();
+    }    }
 
     @Override
     public void registrar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("Registrando datos del visitante en el sistema...");
+    }
+
+//adiccion de registrar entrega (metodo heredado de entrante)
+    @Override
+    public void registrarEntrega() {
+        System.out.println("El visitante no utiliza registrarEntrega().");
     }
     
     //Constructor
