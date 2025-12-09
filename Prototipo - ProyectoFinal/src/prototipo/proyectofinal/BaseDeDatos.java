@@ -300,7 +300,7 @@ public class BaseDeDatos {
         String sql = "insert into usuario values(?,?,?,null,?)"; //Comando
         try(Connection con = DriverManager.getConnection(url, user, password); //Conectar al BD
         PreparedStatement ps = con.prepareStatement(sql);){ //Preparar comando
-            ps.setString(1, nombres); //Reemplazae ?
+            ps.setString(1, nombres); //Reemplazar ?
             ps.setString(2, apellidos);
             ps.setInt(3, rol);
             ps.setString(4, contraseña);
