@@ -1,74 +1,21 @@
 package prototipo.proyectofinal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Administrador extends Usuario implements ConsultarBD{
-    Scanner scanner = new Scanner(System.in);
+    
     //Métodos Personalizados
     
     public void consultarApto(){
-        List<String> apto = new ArrayList<>();
-        int torre = 0;
-        int numero = 0;
-        int idApto = 0;
-        System.out.print("Digita el numero de torre: ");
-        torre = scanner.nextInt();
-        System.out.print("\nDigita el numero del apartamento: ");
-        numero = scanner.nextInt();
-        idApto = BaseDeDatos.idApto(torre, numero);
-        apto = BaseDeDatos.consultarApto(idApto);
+        throw new UnsupportedOperationException("ConsultarApto Not supported yet.");
     }
     public void consultarResidente(){
-        List<String> residente = new ArrayList<>();
-        int torre = 0;
-        int numero = 0;
-        int idApto = 0;
-        System.out.print("Digita el numero de torre: ");
-        torre = scanner.nextInt();
-        System.out.print("\nDigita el numero del apartamento: ");
-        numero = scanner.nextInt();
-        idApto = BaseDeDatos.idApto(torre, numero);
-        residente = BaseDeDatos.consultarResidente(idApto);
+        throw new UnsupportedOperationException("ConsultarResidente Not supported yet.");
     }
     public void registrarApto(){
-        int torre = 0;
-        int numero = 0;
-        String propietario = "";
-        int idPropietario = 0;
-        int opcion = 0;
-        boolean isArrendado = false;
-        System.out.print("Ingresa el numero de torre del Apto: ");
-        torre = scanner.nextInt();
-        System.out.print("\nIngresa el numero del Apto: ");
-        numero = scanner.nextInt();
-        System.out.print("\n¿El Apartamento esta arrendado?: \n\t1.Si\n\t2.No\n");
-        opcion = scanner.nextInt();
-        System.out.print("\nIngresa el nombre completo del propietario: ");
-        scanner.nextLine();
-        propietario = scanner.next();
-        System.out.print("\nIngresa el ID del propietario: ");
-        idPropietario = scanner.nextInt();
-        if(opcion == 1){isArrendado = true;} else{isArrendado = false;}
-        System.out.println(BaseDeDatos.registrarApto(torre, numero, propietario, idPropietario, isArrendado));
+        throw new UnsupportedOperationException("RegistrarApto Not supported yet.");
     }
     public void registrarResidente(){
-        String nombres = null;
-        String apellidos = null;
-        String contraseña = null;
-        int idResidente = 0;
-        int idApto = 0;
-        System.out.print("Ingresa los nombres del Residente: ");
-        nombres = scanner.next();
-        System.out.print("Ingresa los apellidos del Residente: ");
-        nombres = scanner.next();
-        System.out.print("Ingresa la contraseña de sesion del residente: ");
-        contraseña = scanner.next();
-        System.out.print("Ingresa el ID del residente: ");
-        idResidente = scanner.nextInt();
-        System.out.print("Ingresa el ID del apartamento del residente: ");
-        idApto = scanner.nextInt();
-        BaseDeDatos.registrarUsuario(nombres, apellidos, 2, contraseña);
+        throw new UnsupportedOperationException("registrarResidente Not supported yet.");
     }
     
     //Métodos Heredados
@@ -108,30 +55,12 @@ public class Administrador extends Usuario implements ConsultarBD{
     
     @Override
     public void consultarVisitantes() {
-        List<List<String>> visitantes = new ArrayList<>();
-        int torre = 0;
-        int numero = 0;
-        int idDestino = 0;
-        System.out.print("Digita el numero de torre: ");
-        torre = scanner.nextInt();
-        System.out.print("\nDigita el numero del apartamento: ");
-        numero = scanner.nextInt();
-        idDestino = BaseDeDatos.idApto(torre, numero);
-        visitantes = BaseDeDatos.consultarVisitantes(idDestino);
+        throw new UnsupportedOperationException("ConsultarVisitantes Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void consultarPaquetes() {
-        List<List<String>> paquetes = new ArrayList<>();
-        int torre = 0;
-        int numero = 0;
-        int idDestino = 0;
-        System.out.print("Digita el numero de torre: ");
-        torre = scanner.nextInt();
-        System.out.print("\nDigita el numero del apartamento: ");
-        numero = scanner.nextInt();
-        idDestino = BaseDeDatos.idApto(torre, numero);
-        paquetes = BaseDeDatos.consultarPaquetes(idDestino);
+        throw new UnsupportedOperationException("Consultar Paquetes Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     //Contructores

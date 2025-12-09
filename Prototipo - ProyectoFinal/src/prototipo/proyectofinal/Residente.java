@@ -1,22 +1,13 @@
 package prototipo.proyectofinal;
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Residente extends Usuario implements ConsultarBD{
     private int idResidente;
     private int idApto;
-    private Scanner scanner = new Scanner(System.in);
     
     //Métodos personalizados
-    public void aprobarVisita(int idApto){ //Esto va en ventana
-        int opcion = 0;
-        List<List<String>> visitasPendientes = new ArrayList<>(); 
-        System.out.println("Ingresa el ID del visitante que quieras aprobar: ");
-        visitasPendientes = BaseDeDatos.consultarVisitasPendientes(idApto);
-        System.out.println(visitasPendientes);
-        opcion = scanner.nextInt();
-        BaseDeDatos.aprobarVisita(idApto, opcion);
+    public void aprobarVisita(){
+        throw new UnsupportedOperationException("aprobarVisita Not supported yet.");
     }
     
     //Métodos Heredados
@@ -30,7 +21,7 @@ public class Residente extends Usuario implements ConsultarBD{
             opcion = scanner.nextInt();
             switch(opcion){
                 case 1:
-                    aprobarVisita(idApto);
+                    aprobarVisita();
                     break;
                 case 2:
                     consultarVisitantes();
@@ -45,19 +36,17 @@ public class Residente extends Usuario implements ConsultarBD{
                     System.out.println("Opcion invalida, Elije una de las opciones disponibles");
                     break;
             }
-        }while(opcion != 4);
+        }while(true);
     }
 
     @Override
     public void consultarVisitantes() {
-        List<List<String>> visitantes = new ArrayList<>();
-        visitantes = BaseDeDatos.consultarVisitantes(idApto, true);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void consultarPaquetes() {
-        List<List<String>> paquetes = new ArrayList<>();
-        paquetes = BaseDeDatos.consultarPaquetes(idApto);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     //Constructores

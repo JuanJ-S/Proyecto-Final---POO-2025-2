@@ -2,23 +2,11 @@ package prototipo.proyectofinal;
 import java.util.Scanner;
 
 public class Vigilante extends Usuario{
-    Scanner scanner = new Scanner(System.in);
     
     //Métodos personalizados
     
     public void notificarEntrante(){
-        Entrante entrante = null;
-        int opcion = 0;
-        do{
-            System.out.print("¿Que se va a notificar?\n\t1.Visitante\n\t2.Paquete");
-            opcion = scanner.nextInt();
-        }while(opcion < 1 | opcion > 2);
-        if(opcion == 1){
-            entrante = new Visitante();
-        } else{
-            entrante = new Paquete();
-        }
-        entrante.notificarLlegada();
+        throw new UnsupportedOperationException("NotificarEntrante Not supported yet.");
     }
     public void registrarSalida(){
         throw new UnsupportedOperationException("RegistrarSalida Not supported yet.");
