@@ -204,4 +204,20 @@ public class BaseDeDatos {
             System.out.println("Error: "+e);
         }
     }
+    public static int obtenerIdApto(int torre, int numero){
+        int idApto = 0;
+        String sql = "select idApto from apto where torre = ? and numero = ?";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, torre);
+            ps.setInt(2, numero);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                idApto = rs.getInt(1);
+            }
+        } catch(Exception e){
+            System.out.println("Error: "+e);
+        }
+        return idApto;
+    }
 }
