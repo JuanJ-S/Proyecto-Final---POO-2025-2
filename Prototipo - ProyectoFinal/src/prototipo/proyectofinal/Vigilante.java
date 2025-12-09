@@ -31,14 +31,11 @@ public class Vigilante extends Usuario{
                 case 3:
                     registrarEntrega();
                     break;
-                case 4:
-                    cerrarSesion();
-                    break;
                 default:
                     System.out.println("Opcion invalida, Elije una de las opciones disponibles");
                     break;
             }
-        }while(true);
+        }while(opcion != 4);
     }
     
     //Constructor

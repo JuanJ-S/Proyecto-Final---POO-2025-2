@@ -6,6 +6,7 @@ public class BaseDeDatos {
     private static String user = "root";
     private static String password = "Jj10302526";
     
+    //Inicio de Sesion
     public static boolean inicioSesion(int idSistema, String contraseña, int rol){
         String contraseñaBD = null; //Variable para comparar contraseña de BD
         int rolBD = 0; //Variable para comparar rol de BD
@@ -19,7 +20,7 @@ public class BaseDeDatos {
                 rolBD = rs.getInt(3);
                 contraseñaBD = rs.getString(5);
             }
-            resultado = (contraseñaBD.equals(contraseña)&rolBD==rol);
+            resultado = (contraseñaBD.equals(contraseña)&rolBD==rol); //Compara contraseña dada con contraseña en BD
         } catch(Exception e){ //Reporte de Errores en el proceso
             if(resultado == false){
                 System.out.println("Contraseña o Rol equivocados");
@@ -103,15 +104,15 @@ public class BaseDeDatos {
     // Métodos nuevos para compatibilidad con Residente y GUI
     public static String consultarVisitasPendientes(int idApto) {
         StringBuilder resultado = new StringBuilder();
-        String sql = "SELECT idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE idDestino = ? AND isAprobado = false AND fechaDesalida IS NULL";
+        String sql = "select idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE idDestino = ? AND isAprobado = false;";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                resultado.append("ID: ").append(rs.getInt("idVisitante"))
-                        .append(", Nombre: ").append(rs.getString("nombres")).append(" ").append(rs.getString("apellidos"))
-                        .append(", Entrada: ").append(rs.getTimestamp("fechaDeEntrada")).append("\n");
+                resultado.append("ID: ").append(rs.getInt(2))
+                        .append(", Nombre: ").append(rs.getString(3)).append(" ").append(rs.getString(4))
+                        .append(", Entrada: ").append(rs.getTimestamp(7)).append("\n");
             }
         } catch (Exception e) {
             resultado.append("Error: ").append(e.getMessage());

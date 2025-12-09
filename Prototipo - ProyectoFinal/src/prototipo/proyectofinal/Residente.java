@@ -2,12 +2,16 @@ package prototipo.proyectofinal;
 import java.util.Scanner;
 
 public class Residente extends Usuario implements ConsultarBD{
+    private Scanner scanner = new Scanner(System.in);
     private int idResidente;
     private int idApto;
     
     //Métodos personalizados
     public void aprobarVisita(){
-        throw new UnsupportedOperationException("aprobarVisita Not supported yet.");
+        int idVisitante = 0;
+        System.out.print("Digita el ID del Visitante que quieres aprobar: ");
+        idVisitante = scanner.nextInt();
+        BaseDeDatos.aprobarVisita(idApto, idVisitante);
     }
     
     //Métodos Heredados
@@ -29,24 +33,35 @@ public class Residente extends Usuario implements ConsultarBD{
                 case 3:
                     consultarPaquetes();
                     break;
-                case 4:
-                    cerrarSesion();
-                    break;
                 default:
                     System.out.println("Opcion invalida, Elije una de las opciones disponibles");
                     break;
             }
-        }while(true);
+        }while(opcion != 4);
     }
 
     @Override
     public void consultarVisitantes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.print(BaseDeDatos.consultarVisitantes(idApto));
     }
 
     @Override
     public void consultarPaquetes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int opcion = 0;
+        do{
+            System.out.print("1. Consultar Todos los Paquetes\n\t2.Consultar Paquetes por día");
+            opcion = scanner.nextInt();
+            switch(opcion){
+                case 1:
+                    System.out.print(BaseDeDatos.consultarPaquetes(idApto));
+                case 2:
+                    System.out.println("Ingresa el día que quieres consultar (Año-Mes-Dia)");
+                    String dia = scanner.next();
+                    System.out.print(BaseDeDatos.consultarPaquetesPorDia(idApto, nombres));
+                default:
+                    System.out.println("Opcion Invalida, vuelve a elegir");
+            }
+        }while(opcion < 1 | opcion > 2);
     }
     
     //Constructores

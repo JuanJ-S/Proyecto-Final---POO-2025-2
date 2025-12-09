@@ -8,16 +8,14 @@ public abstract class Usuario{
     int idSistema;
     
     //Métodos Personalizados
-    boolean iniciarSesion(int idSesion, String contraseña, int rol) {
+    boolean iniciarSesion(int idSesion, String contraseña, int rol) { //Convoca a inicioSesion para conceder acceso al programa
         boolean acceso = BaseDeDatos.inicioSesion(idSesion, contraseña, rol);
         return acceso;
     }
-    public void cerrarSesion(){}
     
-    public abstract void menu(Scanner scanner);
+    public abstract void menu(Scanner scanner); //Abstracto para el menu de cada clase
     
     //constructores
-    
     public Usuario() {
     }
     

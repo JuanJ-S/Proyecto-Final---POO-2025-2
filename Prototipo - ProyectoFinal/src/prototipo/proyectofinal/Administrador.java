@@ -44,13 +44,11 @@ public class Administrador extends Usuario implements ConsultarBD{
                     break;
                 case 6:
                     registrarResidente();
-                case 7:
-                    cerrarSesion();
                 default:
                     System.out.println("Opcion invalida, Elije una de las opciones disponibles");
                     break;
             }
-        }while(true);
+        }while(opcion != 7);
     }
     
     @Override
