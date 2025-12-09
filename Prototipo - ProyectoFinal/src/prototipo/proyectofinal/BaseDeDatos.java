@@ -189,4 +189,19 @@ public class BaseDeDatos {
         }
         return resultado.toString();
     }
+    
+    //Funciones Vigilante
+    public static void registrarVisitante(int idVisitante, String nombres, String apellidos, int idDestino){
+        String sql = "insert into visitante values(null,?,?,?,?,false,now(),null)";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, idVisitante);
+            ps.setString(2, nombres);
+            ps.setString(3, apellidos);
+            ps.setInt(4, idDestino);
+            ps.executeUpdate();
+        } catch(Exception e){
+            System.out.println("Error: "+e);
+        }
+    }
 }
