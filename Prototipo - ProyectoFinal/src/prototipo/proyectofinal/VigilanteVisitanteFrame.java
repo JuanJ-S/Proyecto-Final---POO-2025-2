@@ -27,29 +27,28 @@ public class VigilanteVisitanteFrame extends JFrame {
         add(volverButton);
 
         registrarButton.addActionListener(e -> {
-            // Formulario para registrar visitante
+            // Formulario para registrar visitante usando BaseDeDatos.registrarVisitante
+            JTextField idField = new JTextField();
             JTextField nombreField = new JTextField();
             JTextField apellidoField = new JTextField();
             JTextField idDestinoField = new JTextField();
             Object[] message = {
+                "ID Visitante:", idField,
                 "Nombre:", nombreField,
                 "Apellido:", apellidoField,
                 "ID Destino:", idDestinoField
             };
             int option = JOptionPane.showConfirmDialog(null, message, "Registrar Visitante", JOptionPane.OK_CANCEL_OPTION);
             if (option == JOptionPane.OK_OPTION) {
-                // Lógica para registrar (insertar en BD)
-                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/conjunto", "root", "Jj10302526");
-                     PreparedStatement ps = con.prepareStatement("INSERT INTO visitante (nombres, apellidos, idDestino, fechaDeEntrada) VALUES (?, ?, ?, ?)")) {
-                    ps.setString(1, nombreField.getText());
-                    ps.setString(2, apellidoField.getText());
-                    ps.setInt(3, Integer.parseInt(idDestinoField.getText()));
-                    ps.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
-                    ps.executeUpdate();
+                try {
+                    int idVisitante = Integer.parseInt(idField.getText());
+                    String nombres = nombreField.getText();
+                    String apellidos = apellidoField.getText();
+                    int idDestino = Integer.parseInt(idDestinoField.getText());
+                    BaseDeDatos.registrarVisitante(idVisitante, nombres, apellidos, idDestino);  // Usar método de BaseDeDatos
                     JOptionPane.showMessageDialog(null, "Visitante registrado. Notificación enviada al apartamento.");
-                    // Aquí podrías agregar lógica para notificar (e.g., simular llamada)
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Datos inválidos. Intenta de nuevo.");
                 }
             }
         });
@@ -59,8 +58,7 @@ public class VigilanteVisitanteFrame extends JFrame {
             String[] options = {"Ver Visitantes Activos", "Consultar por Día"};
             int choice = JOptionPane.showOptionDialog(null, "Elige una opción", "Consultar Visitantes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
             if (choice == 0) {
-                // Mostrar tabla de visitantes activos
-                // (Lógica simplificada: consulta BD y muestra en JTable)
+                // Mostrar tabla de visitantes activos (puedes implementar JTable aquí)
                 JOptionPane.showMessageDialog(null, "Tabla de visitantes activos (implementar JTable aquí).");
             } else {
                 // Consultar por día
