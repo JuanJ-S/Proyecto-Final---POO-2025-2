@@ -7,7 +7,7 @@ public class Residente extends Usuario implements ConsultarBD{
     private int idApto;
     
     //Métodos personalizados
-    public void aprobarVisita(){
+    private void aprobarVisita(){
         int idVisitante = 0;
         System.out.print("Digita el ID del Visitante que quieres aprobar: ");
         idVisitante = scanner.nextInt();
@@ -41,12 +41,12 @@ public class Residente extends Usuario implements ConsultarBD{
     }
 
     @Override
-    public void consultarVisitantes() {
+    private void consultarVisitantes() {
         System.out.print(BaseDeDatos.consultarVisitantes(idApto));
     }
 
     @Override
-    public void consultarPaquetes() {
+    private void consultarPaquetes() {
         int opcion = 0;
         do{
             System.out.print("1. Consultar Todos los Paquetes\n\t2.Consultar Paquetes por día");
@@ -66,7 +66,7 @@ public class Residente extends Usuario implements ConsultarBD{
     
     //Constructores
 
-    public Residente() {
+    private Residente() {
     }
 
     public Residente(int idResidente, int idApto, String nombres, String Apellidos, int idSistema) {
@@ -76,6 +76,7 @@ public class Residente extends Usuario implements ConsultarBD{
     }
     
     //Getters y Setters
+    
     
     public int getIdResidente() {
         return idResidente;

@@ -3,11 +3,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-public class Administrador extends Usuario implements ConsultarBD{
+    public class Administrador extends Usuario implements ConsultarBD{
     private Scanner scanner = new Scanner(System.in);
     //Métodos Personalizados
     
-    public void consultarApto(){
+    private void consultarApto(){
         int torre = 0;
         int numero = 0;
         System.out.print("Digita la torre del apto: ");
@@ -16,7 +16,7 @@ public class Administrador extends Usuario implements ConsultarBD{
         numero = scanner.nextInt();
         System.out.print(BaseDeDatos.consultarApto(torre, numero));
     }
-    public void consultarResidente(){
+    private void consultarResidente(){
         int torre = 0;
         int numero = 0;
         int idApto = 0;
@@ -27,7 +27,7 @@ public class Administrador extends Usuario implements ConsultarBD{
         idApto = BaseDeDatos.obtenerIdApto(torre, numero);
         System.out.print(BaseDeDatos.consultarResidente(idApto));
     }
-    public void registrarApto(){
+    private void registrarApto(){
         int torre = 0;
         int numero = 0;
         String propietario = null;
@@ -46,7 +46,7 @@ public class Administrador extends Usuario implements ConsultarBD{
         isArrendado = scanner.nextBoolean();
         BaseDeDatos.registrarApto(torre, numero, propietario, idPropietario, isArrendado);
     }
-    public void registrarResidente(){
+    private void registrarResidente(){
         int torre = 0;
         int numero = 0;
         int idApto = 0;
@@ -104,7 +104,7 @@ public class Administrador extends Usuario implements ConsultarBD{
     }
     
     @Override
-    public void consultarVisitantes() {
+    private void consultarVisitantes() {
         int torre = 0;
         int numero = 0;
         int idApto = 0;
@@ -117,7 +117,7 @@ public class Administrador extends Usuario implements ConsultarBD{
     }
 
     @Override
-    public void consultarPaquetes() {
+    private void consultarPaquetes() {
         int torre = 0;
         int numero = 0;
         int idApto = 0;
@@ -145,7 +145,7 @@ public class Administrador extends Usuario implements ConsultarBD{
     }
     
     //Contructores
-    public Administrador() {
+    private Administrador() {
     }
 
     public Administrador(String nombres, String Apellidos, int idSistema) {

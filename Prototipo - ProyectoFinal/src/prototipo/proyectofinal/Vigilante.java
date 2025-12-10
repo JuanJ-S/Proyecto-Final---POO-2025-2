@@ -5,7 +5,7 @@ public class Vigilante extends Usuario{
     private Scanner scanner  = new Scanner(System.in);
     //Métodos personalizados
     
-    public void notificarVisitante(){
+    private void notificarVisitante(){
         int idVisitante = 0;
         String nombres = null;
         String apellidos = null;
@@ -26,7 +26,7 @@ public class Vigilante extends Usuario{
         idDestino = BaseDeDatos.obtenerIdApto(torre, numero);
         BaseDeDatos.registrarVisitante(idVisitante, nombres, apellidos, idDestino);
     }
-    public void registrarPaquete(){
+    private void registrarPaquete(){
         String remitente = null;
         String destinatario = null;
         int torre = 0;
@@ -43,13 +43,13 @@ public class Vigilante extends Usuario{
         idDestino = BaseDeDatos.obtenerIdApto(torre, numero);
         BaseDeDatos.registrarPaquete(remitente, destinatario, idDestino);
     }
-    public void registrarSalida(){
+    private void registrarSalida(){
         int idVisitante = 0;
         System.out.print("Ingresa el ID del visitante: ");
         idVisitante = scanner.nextInt();
         BaseDeDatos.registrarSalida(idVisitante);
     }
-    public void registrarEntrega(){
+    private void registrarEntrega(){
         int idPaquete = 0;
         System.out.print("Ingresa el ID del Paquete: ");
         idPaquete = scanner.nextInt();
@@ -83,7 +83,7 @@ public class Vigilante extends Usuario{
     }
     
     //Constructor
-    public Vigilante() {
+    private Vigilante() {
     }
 
     public Vigilante(String nombres, String Apellidos, int idSistema) {
