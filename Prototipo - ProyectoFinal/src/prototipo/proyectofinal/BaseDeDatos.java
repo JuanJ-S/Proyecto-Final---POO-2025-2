@@ -206,6 +206,19 @@ public class BaseDeDatos {
             System.out.println("Error: "+e);
         }
     }
+    
+    public static void registrarPaquete(String remitente, String destinatario, int idDestino){
+        String sql = "insert into paquete values(null,?,?,?,false,now(),null)";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setString(1, remitente);
+            ps.setString(2, destinatario);
+            ps.setInt(3, idDestino);
+            ps.executeUpdate();
+        } catch(Exception e){
+            System.out.println("Error: "+e);
+        }
+    }
 
     public static int obtenerIdApto(int torre, int numero){
         int idApto = 0;
