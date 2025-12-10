@@ -14,7 +14,7 @@ public class ResidentePaqueteFrame extends JFrame {
         this.idSesion = idSesion;
         this.residente = BaseDeDatos.construirResidente(idSesion);
         setTitle("Gestión de Paquetes - Residente");
-        setSize(400, 300);
+        setSize(800, 600);
         setLayout(new BorderLayout());
 
         JPanel panel = new JPanel(new BorderLayout());

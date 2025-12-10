@@ -13,7 +13,7 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame() {
         setTitle("Inicio de Sesión");
-        setSize(300, 200);
+        setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(5, 2));
 

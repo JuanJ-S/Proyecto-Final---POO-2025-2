@@ -11,7 +11,7 @@ public class AdministradorFrame extends JFrame {
     public AdministradorFrame(int idSesion) {
         this.idSesion = idSesion;
         setTitle("Menú Administrador");
-        setSize(500, 400);
+        setSize(1000, 800);
         setLayout(new GridLayout(8, 1));
 
         JButton consultarVisitantesButton = new JButton("Consultar Visitantes");
