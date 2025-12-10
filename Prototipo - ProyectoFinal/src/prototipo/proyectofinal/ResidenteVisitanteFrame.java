@@ -14,7 +14,8 @@ public class ResidenteVisitanteFrame extends JFrame {
 
     public ResidenteVisitanteFrame(int idSesion) {
         this.idSesion = idSesion;
-        this.residente = BaseDeDatos.construirResidente(idSesion);
+        // Se asume que BaseDeDatos.construirResidente(idSesion) funciona correctamente
+        this.residente = BaseDeDatos.construirResidente(idSesion); 
         setTitle("Gestión de Visitantes - Residente");
         setSize(400, 300);
         setLayout(new BorderLayout());
@@ -25,28 +26,33 @@ public class ResidenteVisitanteFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(visitasArea);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        cargarVisitasPendientes(visitasArea);  // Cargar solo visitantes
+        cargarVisitasPendientes(visitasArea); // Cargar solo visitantes
 
+        // --- PANEL DE BOTONES CORREGIDO ---
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton aceptarButton = new JButton("Aceptar Visitante");
         JButton rechazarButton = new JButton("Rechazar Visitante");
         JButton irAPaquetesButton = new JButton("Ir a Paquetes");
-        JButton volverButton = new JButton("Cerrar Sesión");
+        // Cambiamos el nombre del botón para que su función sea clara: Cerrar Sesión
+        JButton cerrarSesionButton = new JButton("Cerrar Sesión"); 
 
         buttonPanel.add(aceptarButton);
         buttonPanel.add(rechazarButton);
         buttonPanel.add(irAPaquetesButton);
-        buttonPanel.add(volverButton);
+        buttonPanel.add(cerrarSesionButton); // Usamos el botón con la función de Cerrar Sesión
 
         add(panel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+
+        // ... [ActionListeners para Aceptar y Rechazar Visitante] ...
 
         aceptarButton.addActionListener(e -> {
             String idVisitanteStr = JOptionPane.showInputDialog("Ingresa el ID del visitante a aprobar:");
             if (idVisitanteStr != null) {
                 try {
                     int idVisitante = Integer.parseInt(idVisitanteStr);
-                    BaseDeDatos.aprobarVisita(residente.getIdApto(), idVisitante);
+                    // Se asume que BaseDeDatos.aprobarVisita existe
+                    BaseDeDatos.aprobarVisita(residente.getIdApto(), idVisitante); 
                     JOptionPane.showMessageDialog(null, "Visita aprobada.");
                     cargarVisitasPendientes(visitasArea);
                 } catch (NumberFormatException ex) {
@@ -60,7 +66,8 @@ public class ResidenteVisitanteFrame extends JFrame {
             if (idVisitanteStr != null) {
                 try {
                     int idVisitante = Integer.parseInt(idVisitanteStr);
-                    JOptionPane.showMessageDialog(null, "Visita rechazada.");
+                    // Se asume que BaseDeDatos.rechazarVisita existe, aquí solo muestra mensaje
+                    JOptionPane.showMessageDialog(null, "Visita rechazada."); 
                     cargarVisitasPendientes(visitasArea);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "ID inválido.");
@@ -68,19 +75,24 @@ public class ResidenteVisitanteFrame extends JFrame {
             }
         });
 
+        // --- CONEXIÓN A PAQUETES ---
         irAPaquetesButton.addActionListener(e -> {
             dispose();
-            new ResidentePaqueteFrame(idSesion).setVisible(true);
+            new ResidentePaqueteFrame(idSesion).setVisible(true); // Abre la ventana de gestión de paquetes
         });
 
-        volverButton.addActionListener(e -> {
+        // --- CERRAR SESIÓN ---
+        cerrarSesionButton.addActionListener(e -> {
             dispose();
-            new LoginFrame().setVisible(true);
+            new LoginFrame().setVisible(true); // Vuelve al Login
         });
+        
+        // El resto del código del constructor...
     }
 
     private void cargarVisitasPendientes(JTextArea area) {
-        String visitas = BaseDeDatos.consultarVisitasPendientes(residente.getIdApto());
-        area.setText("Visitas Pendientes:\n" + visitas);  // Solo visitantes
+        // Se asume que BaseDeDatos.consultarVisitasPendientes(idApto) funciona
+        String visitas = BaseDeDatos.consultarVisitasPendientes(residente.getIdApto()); 
+        area.setText("Visitas Pendientes:\n" + visitas); // Solo visitantes
     }
 }
