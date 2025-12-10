@@ -13,7 +13,7 @@ public abstract class Usuario{
         return acceso;
     }
     
-    public abstract void menu(Scanner scanner); //Abstracto para el menu de cada clase
+    public abstract void menu(); //Abstracto para el menu de cada clase
     
     //constructores
     public Usuario() {

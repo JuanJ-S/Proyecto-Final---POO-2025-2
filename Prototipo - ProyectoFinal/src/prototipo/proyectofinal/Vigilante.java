@@ -40,7 +40,7 @@ public class Vigilante extends Usuario{
     }
     //Métodos Heredados
     @Override
-    public void menu(Scanner scanner){
+    public void menu(){
         int opcion = 0;
         do{
             System.out.println("¿Que quieres hacer?: \n\t1.Notificar Entrante\n\t2.Registrar Salida\n\t3.Registrar Entrega\n\t4.Cerrar Sesion");

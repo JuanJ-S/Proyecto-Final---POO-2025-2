@@ -73,7 +73,7 @@ public class Administrador extends Usuario implements ConsultarBD{
     //Métodos Heredados
     
     @Override
-    public void menu(Scanner scanner){
+    public void menu(){
         int opcion = 0;
         do{
             System.out.println("¿Que quieres hacer?: \n\t1.Consultar Visitantes\n\t2.Consultar Paquetes\n\t3.Consultar Apartamento\n\t4.Consultar Residente\n\t5.Registrar Apartamento\n\t6.Registrar Residente\n\t7.Cerrar Sesion");
