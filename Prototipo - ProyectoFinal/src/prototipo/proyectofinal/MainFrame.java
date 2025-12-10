@@ -27,12 +27,14 @@ public class MainFrame extends JFrame {
         add(cerrarSesionButton);
 
         visitanteButton.addActionListener(e -> {
-            if (rol == 2) { // Residente
-                new ResidenteVisitanteFrame(idSesion).setVisible(true);
-            } else if (rol == 3) { // Vigilante
-                new VigilanteVisitanteFrame(idSesion).setVisible(true);
-            }
-        });
+    if (rol == 1) { // Administrador
+        new AdministradorFrame(idSesion).setVisible(true);
+    } else if (rol == 2) { // Residente
+        new ResidenteVisitanteFrame(idSesion).setVisible(true);
+    } else if (rol == 3) { // Vigilante
+        new VigilanteVisitanteFrame(idSesion).setVisible(true);
+    }
+});
 
         paqueteButton.addActionListener(e -> {
             if (rol == 2) { // Residente
