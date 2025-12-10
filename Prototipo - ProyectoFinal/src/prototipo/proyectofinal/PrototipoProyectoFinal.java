@@ -23,5 +23,4 @@ public class PrototipoProyectoFinal{
         }while(rol<1|rol>3);
         return rol;
     }
-    
 }
