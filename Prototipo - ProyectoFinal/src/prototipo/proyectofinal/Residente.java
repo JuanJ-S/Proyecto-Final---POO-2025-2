@@ -18,7 +18,7 @@ public class Residente extends Usuario implements ConsultarBD{
 
     //Esto va en ventana
     @Override
-    public void menu(Scanner scanner){
+    public void menu(){
         int opcion = 0;
         do{
             System.out.println("¿Que quieres hacer?: \n\t1.Aprobar Visita\n\t2.Consultar Visitas\n\t3.Consultar Paquetes\n\t4.Cerrar Sesion");
