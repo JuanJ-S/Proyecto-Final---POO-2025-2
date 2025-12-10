@@ -104,7 +104,7 @@ import java.util.Scanner;
     }
     
     @Override
-    private void consultarVisitantes() {
+    public void consultarVisitantes() {
         int torre = 0;
         int numero = 0;
         int idApto = 0;
@@ -117,7 +117,7 @@ import java.util.Scanner;
     }
 
     @Override
-    private void consultarPaquetes() {
+    public void consultarPaquetes() {
         int torre = 0;
         int numero = 0;
         int idApto = 0;
@@ -145,7 +145,7 @@ import java.util.Scanner;
     }
     
     //Contructores
-    private Administrador() {
+    public Administrador() {
     }
 
     public Administrador(String nombres, String Apellidos, int idSistema) {

@@ -83,7 +83,7 @@ public class Vigilante extends Usuario{
     }
     
     //Constructor
-    private Vigilante() {
+    public Vigilante() {
     }
 
     public Vigilante(String nombres, String Apellidos, int idSistema) {
