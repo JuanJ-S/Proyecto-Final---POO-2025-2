@@ -104,15 +104,17 @@ public class BaseDeDatos {
     // Métodos nuevos para compatibilidad con Residente y GUI
     public static String consultarVisitasPendientes(int idApto) {
         StringBuilder resultado = new StringBuilder();
-        String sql = "select idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE idDestino = ? AND isAprobado = false;";
+        // Corregido: Agregar filtro para visitas activas (sin salida)
+        String sql = "SELECT idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE idDestino = ? AND isAprobado = false AND fechaDesalida IS NULL;";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                resultado.append("ID: ").append(rs.getInt(2))
-                        .append(", Nombre: ").append(rs.getString(3)).append(" ").append(rs.getString(4))
-                        .append(", Entrada: ").append(rs.getTimestamp(7)).append("\n");
+                // Usar índices correctos (1: idVisitante, 2: nombres, 3: apellidos, 4: fechaDeEntrada)
+                resultado.append("ID: ").append(rs.getInt(1))
+                        .append(", Nombre: ").append(rs.getString(2)).append(" ").append(rs.getString(3))
+                        .append(", Entrada: ").append(rs.getTimestamp(4)).append("\n");
             }
         } catch (Exception e) {
             resultado.append("Error: ").append(e.getMessage());
@@ -204,6 +206,7 @@ public class BaseDeDatos {
             System.out.println("Error: "+e);
         }
     }
+
     public static int obtenerIdApto(int torre, int numero){
         int idApto = 0;
         String sql = "select idApto from apto where torre = ? and numero = ?";
