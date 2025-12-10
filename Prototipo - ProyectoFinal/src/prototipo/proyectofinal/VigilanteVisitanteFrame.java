@@ -12,19 +12,21 @@ public class VigilanteVisitanteFrame extends JFrame {
     public VigilanteVisitanteFrame(int idSesion) {
         this.idSesion = idSesion;
         setTitle("Gestión de Visitantes - Vigilante");
-        setSize(400, 350);
-        setLayout(new GridLayout(6, 1));
+        // Ajusta el tamaño ya que ahora hay menos botones (6 -> 5)
+        setSize(400, 300); 
+        // Cambia la cantidad de filas en el layout (6 -> 5)
+        setLayout(new GridLayout(5, 1)); 
 
         JButton registrarButton = new JButton("Notificar Entrante (Registrar Visitante)");
         JButton registrarSalidaButton = new JButton("Registrar Salida");
-        JButton registrarEntregaButton = new JButton("Registrar Entrega");
+        // *** SE ELIMINA ESTE BOTÓN: JButton registrarEntregaButton = new JButton("Registrar Entrega"); ***
         JButton consultarButton = new JButton("Consultar Visitantes");
         JButton irAPaquetesButton = new JButton("Ir a Paquetes");
         JButton volverButton = new JButton("Volver al Menú Principal");
 
         add(registrarButton);
         add(registrarSalidaButton);
-        add(registrarEntregaButton);
+        // *** SE ELIMINA LA ADICIÓN DEL BOTÓN: add(registrarEntregaButton); ***
         add(consultarButton);
         add(irAPaquetesButton);
         add(volverButton);
@@ -76,19 +78,6 @@ public class VigilanteVisitanteFrame extends JFrame {
             }
         });
 
-        registrarEntregaButton.addActionListener(e -> {
-            String idPaqueteStr = JOptionPane.showInputDialog("Ingresa el ID del paquete para registrar entrega:");
-            if (idPaqueteStr != null) {
-                try {
-                    int idPaquete = Integer.parseInt(idPaqueteStr);
-                    BaseDeDatos.registrarEntrega(idPaquete);
-                    JOptionPane.showMessageDialog(null, "Entrega registrada.");
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "ID inválido.");
-                }
-            }
-        });
-
         consultarButton.addActionListener(e -> {
             String[] options = {"Ver Visitantes Activos", "Consultar por Día"};
             int choice = JOptionPane.showOptionDialog(null, "Elige una opción", "Consultar Visitantes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
@@ -116,6 +105,7 @@ public class VigilanteVisitanteFrame extends JFrame {
              ResultSet rs = ps.executeQuery()) {
             
             String[] columnNames = {"ID Visitante", "Nombres", "Apellidos", "Fecha Entrada"};
+            // El resto del método es el mismo...
             Object[][] data = new Object[100][4];
             int row = 0;
             while (rs.next() && row < 100) {
