@@ -10,30 +10,27 @@ import java.util.List;
 
 public class ResidenteVisitanteFrame extends JFrame {
     private int idSesion;
-    private Residente residente;  // Objeto completo para acceder a idApto
+    private Residente residente;
 
     public ResidenteVisitanteFrame(int idSesion) {
         this.idSesion = idSesion;
-        this.residente = BaseDeDatos.construirResidente(idSesion);  // Construir residente para obtener idApto
+        this.residente = BaseDeDatos.construirResidente(idSesion);
         setTitle("Gestión de Visitantes - Residente");
         setSize(400, 300);
         setLayout(new BorderLayout());
 
-        // Panel para mostrar visitas pendientes
         JPanel panel = new JPanel(new BorderLayout());
         JTextArea visitasArea = new JTextArea();
         visitasArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(visitasArea);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Cargar visitas pendientes al abrir
-        cargarVisitasPendientes(visitasArea);
+        cargarVisitasPendientes(visitasArea);  // Cargar solo visitantes
 
-        // Botones para aprobar/rechazar y navegación
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton aceptarButton = new JButton("Aceptar Visitante");
         JButton rechazarButton = new JButton("Rechazar Visitante");
-        JButton irAPaquetesButton = new JButton("Ir a Paquetes");  // Nuevo botón
+        JButton irAPaquetesButton = new JButton("Ir a Paquetes");
         JButton volverButton = new JButton("Cerrar Sesión");
 
         buttonPanel.add(aceptarButton);
@@ -49,9 +46,9 @@ public class ResidenteVisitanteFrame extends JFrame {
             if (idVisitanteStr != null) {
                 try {
                     int idVisitante = Integer.parseInt(idVisitanteStr);
-                    BaseDeDatos.aprobarVisita(residente.getIdApto(), idVisitante);  // Usar idApto
-                    JOptionPane.showMessageDialog(null, "Visita aprobada. Notificación enviada al vigilante.");
-                    cargarVisitasPendientes(visitasArea);  // Recargar lista
+                    BaseDeDatos.aprobarVisita(residente.getIdApto(), idVisitante);
+                    JOptionPane.showMessageDialog(null, "Visita aprobada.");
+                    cargarVisitasPendientes(visitasArea);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "ID inválido.");
                 }
@@ -63,9 +60,8 @@ public class ResidenteVisitanteFrame extends JFrame {
             if (idVisitanteStr != null) {
                 try {
                     int idVisitante = Integer.parseInt(idVisitanteStr);
-                    // Asumir un método para rechazar (agrega en BaseDeDatos si no existe)
-                    JOptionPane.showMessageDialog(null, "Visita rechazada. Notificación enviada al vigilante.");
-                    cargarVisitasPendientes(visitasArea);  // Recargar lista
+                    JOptionPane.showMessageDialog(null, "Visita rechazada.");
+                    cargarVisitasPendientes(visitasArea);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "ID inválido.");
                 }
@@ -73,8 +69,8 @@ public class ResidenteVisitanteFrame extends JFrame {
         });
 
         irAPaquetesButton.addActionListener(e -> {
-            dispose();  // Cerrar ventana actual
-            new ResidentePaqueteFrame(idSesion).setVisible(true);  // Abrir Paquetes
+            dispose();
+            new ResidentePaqueteFrame(idSesion).setVisible(true);
         });
 
         volverButton.addActionListener(e -> {
@@ -84,9 +80,7 @@ public class ResidenteVisitanteFrame extends JFrame {
     }
 
     private void cargarVisitasPendientes(JTextArea area) {
-        // Llamar al método de BaseDeDatos para obtener visitas pendientes
-        // Asumiendo que BaseDeDatos.consultarVisitasPendientes devuelve una lista o string
-        String visitas = BaseDeDatos.consultarVisitasPendientes(residente.getIdApto());  // Usar idApto
-        area.setText("Visitas Pendientes:\n" + visitas);
+        String visitas = BaseDeDatos.consultarVisitasPendientes(residente.getIdApto());
+        area.setText("Visitas Pendientes:\n" + visitas);  // Solo visitantes
     }
 }

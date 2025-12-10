@@ -4,14 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class ResidentePaqueteFrame extends JFrame {
     private int idSesion;
-    private Residente residente;  // Objeto completo para acceder a idApto y nombres
+    private Residente residente;
 
     public ResidentePaqueteFrame(int idSesion) {
         this.idSesion = idSesion;
-        this.residente = BaseDeDatos.construirResidente(idSesion);  // Construir residente para obtener idApto y nombres
+        this.residente = BaseDeDatos.construirResidente(idSesion);
         setTitle("Gestión de Paquetes - Residente");
         setSize(400, 300);
         setLayout(new BorderLayout());
@@ -22,11 +23,10 @@ public class ResidentePaqueteFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(paquetesArea);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Panel de botones para submenú (similar a consultarPaquetes() en Residente)
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton consultarTodosButton = new JButton("Consultar Todos los Paquetes");
         JButton consultarPorDiaButton = new JButton("Consultar Paquetes por Día");
-        JButton irAVisitantesButton = new JButton("Ir a Visitantes");  // Nuevo botón
+        JButton irAVisitantesButton = new JButton("Ir a Visitantes");
         JButton volverButton = new JButton("Cerrar Sesión");
 
         buttonPanel.add(consultarTodosButton);
@@ -38,25 +38,19 @@ public class ResidentePaqueteFrame extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
 
         consultarTodosButton.addActionListener(e -> {
-            // Opción 1: Consultar todos los paquetes
-            String paquetes = BaseDeDatos.consultarPaquetes(residente.getIdApto());  // Usar idApto
-            paquetesArea.setText("Todos los Paquetes:\n" + paquetes);
+            mostrarTablaPaquetes("SELECT idPaquete, remitente, fechaDeLlegada, isEntregado FROM paquete WHERE idDestino = " + residente.getIdApto());
         });
 
         consultarPorDiaButton.addActionListener(e -> {
-            // Opción 2: Consultar por día, usando nombres del residente
-            String dia = JOptionPane.showInputDialog("Ingresa el día que quieres consultar (Año-Mes-Día, e.g., 2023-10-15):");
-            if (dia != null && !dia.trim().isEmpty()) {
-                String paquetes = BaseDeDatos.consultarPaquetesPorDia(residente.getIdApto(), residente.getNombres());  // Usar idApto y nombres
-                paquetesArea.setText("Paquetes del día " + dia + " (filtrado por nombre: " + residente.getNombres() + "):\n" + paquetes);
-            } else {
-                JOptionPane.showMessageDialog(null, "Fecha inválida. Intenta de nuevo.");
+            String dia = JOptionPane.showInputDialog("Ingresa el día (YYYY-MM-DD):");
+            if (dia != null) {
+                mostrarTablaPaquetes("SELECT idPaquete, remitente, fechaDeLlegada, isEntregado FROM paquete WHERE idDestino = " + residente.getIdApto() + " AND DATE(fechaDeLlegada) = '" + dia + "'");
             }
         });
 
         irAVisitantesButton.addActionListener(e -> {
-            dispose();  // Cerrar ventana actual
-            new ResidenteVisitanteFrame(idSesion).setVisible(true);  // Abrir Visitantes
+            dispose();
+            new ResidenteVisitanteFrame(idSesion).setVisible(true);
         });
 
         volverButton.addActionListener(e -> {
@@ -64,4 +58,32 @@ public class ResidentePaqueteFrame extends JFrame {
             new LoginFrame().setVisible(true);
         });
     }
+
+    private void mostrarTablaPaquetes(String sql) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/conjunto", "root", "Jj10302526");
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            String[] columnNames = {"ID Paquete", "Remitente", "Fecha Llegada", "Entregado"};
+            Object[][] data = new Object[100][4];  // Ajusta tamaño si tienes más filas
+            int row = 0;
+            while (rs.next() && row < 100) {
+                data[row][0] = rs.getInt("idPaquete");
+                data[row][1] = rs.getString("remitente");
+                data[row][2] = rs.getTimestamp("fechaDeLlegada");
+                data[row][3] = rs.getBoolean("isEntregado") ? "Sí" : "No";
+                row++;
+            }
+            
+            JTable table = new JTable(data, columnNames);
+            JScrollPane scrollPane = new JScrollPane(table);
+            JFrame tableFrame = new JFrame("Lista de Paquetes");
+            tableFrame.add(scrollPane);
+            tableFrame.setSize(600, 400);
+            tableFrame.setVisible(true);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+        }
+    }
 }
+            

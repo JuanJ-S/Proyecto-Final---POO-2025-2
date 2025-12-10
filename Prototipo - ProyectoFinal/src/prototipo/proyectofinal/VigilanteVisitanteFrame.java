@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class VigilanteVisitanteFrame extends JFrame {
     private int idSesion;
@@ -11,14 +12,14 @@ public class VigilanteVisitanteFrame extends JFrame {
     public VigilanteVisitanteFrame(int idSesion) {
         this.idSesion = idSesion;
         setTitle("Gestión de Visitantes - Vigilante");
-        setSize(400, 350);  // Aumentar tamaño para más botones
-        setLayout(new GridLayout(6, 1));  // Cambiar a 6 filas para acomodar nuevos botones
+        setSize(400, 350);
+        setLayout(new GridLayout(6, 1));
 
         JButton registrarButton = new JButton("Notificar Entrante (Registrar Visitante)");
         JButton registrarSalidaButton = new JButton("Registrar Salida");
-        JButton registrarEntregaButton = new JButton("Registrar Entrega");  // Ya estaba
+        JButton registrarEntregaButton = new JButton("Registrar Entrega");
         JButton consultarButton = new JButton("Consultar Visitantes");
-        JButton irAPaquetesButton = new JButton("Ir a Paquetes");  // Nuevo botón
+        JButton irAPaquetesButton = new JButton("Ir a Paquetes");
         JButton volverButton = new JButton("Volver al Menú Principal");
 
         add(registrarButton);
@@ -29,18 +30,17 @@ public class VigilanteVisitanteFrame extends JFrame {
         add(volverButton);
 
         registrarButton.addActionListener(e -> {
-            // Formulario para registrar visitante, ahora con torre y numero
             JTextField idField = new JTextField();
             JTextField nombreField = new JTextField();
             JTextField apellidoField = new JTextField();
-            JTextField torreField = new JTextField();  // Nuevo campo
-            JTextField numeroField = new JTextField();  // Nuevo campo
+            JTextField torreField = new JTextField();
+            JTextField numeroField = new JTextField();
             Object[] message = {
                 "ID Visitante:", idField,
                 "Nombre:", nombreField,
                 "Apellido:", apellidoField,
-                "Torre:", torreField,  // Pedir torre
-                "Número:", numeroField  // Pedir numero
+                "Torre:", torreField,
+                "Número:", numeroField
             };
             int option = JOptionPane.showConfirmDialog(null, message, "Notificar Entrante", JOptionPane.OK_CANCEL_OPTION);
             if (option == JOptionPane.OK_OPTION) {
@@ -50,12 +50,12 @@ public class VigilanteVisitanteFrame extends JFrame {
                     String apellidos = apellidoField.getText();
                     int torre = Integer.parseInt(torreField.getText());
                     int numero = Integer.parseInt(numeroField.getText());
-                    int idDestino = BaseDeDatos.obtenerIdApto(torre, numero);  // Obtener idDestino
+                    int idDestino = BaseDeDatos.obtenerIdApto(torre, numero);
                     if (idDestino == 0) {
                         JOptionPane.showMessageDialog(null, "Apartamento no encontrado.");
                         return;
                     }
-                    BaseDeDatos.registrarVisitante(idVisitante, nombres, apellidos, idDestino);  // Usar método de BaseDeDatos
+                    BaseDeDatos.registrarVisitante(idVisitante, nombres, apellidos, idDestino);
                     JOptionPane.showMessageDialog(null, "Visitante registrado. Notificación enviada al apartamento.");
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Datos inválidos. Intenta de nuevo.");
@@ -68,7 +68,7 @@ public class VigilanteVisitanteFrame extends JFrame {
             if (idVisitanteStr != null) {
                 try {
                     int idVisitante = Integer.parseInt(idVisitanteStr);
-                    BaseDeDatos.registrarSalida(idVisitante);  // Nuevo método
+                    BaseDeDatos.registrarSalida(idVisitante);
                     JOptionPane.showMessageDialog(null, "Salida registrada.");
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "ID inválido.");
@@ -81,7 +81,7 @@ public class VigilanteVisitanteFrame extends JFrame {
             if (idPaqueteStr != null) {
                 try {
                     int idPaquete = Integer.parseInt(idPaqueteStr);
-                    BaseDeDatos.registrarEntrega(idPaquete);  // Nuevo método
+                    BaseDeDatos.registrarEntrega(idPaquete);
                     JOptionPane.showMessageDialog(null, "Entrega registrada.");
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "ID inválido.");
@@ -90,14 +90,15 @@ public class VigilanteVisitanteFrame extends JFrame {
         });
 
         consultarButton.addActionListener(e -> {
-            // Opción 1: Visitantes activos
             String[] options = {"Ver Visitantes Activos", "Consultar por Día"};
             int choice = JOptionPane.showOptionDialog(null, "Elige una opción", "Consultar Visitantes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
             if (choice == 0) {
-                JOptionPane.showMessageDialog(null, "Tabla de visitantes activos (implementar JTable aquí).");
+                mostrarTablaVisitantes("SELECT idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE fechaDesalida IS NULL");
             } else {
                 String dia = JOptionPane.showInputDialog("Ingresa el día (YYYY-MM-DD):");
-                JOptionPane.showMessageDialog(null, "Tabla de visitantes del día " + dia + " (implementar JTable aquí).");
+                if (dia != null) {
+                    mostrarTablaVisitantes("SELECT idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE DATE(fechaDeEntrada) = '" + dia + "'");
+                }
             }
         });
 
@@ -106,6 +107,33 @@ public class VigilanteVisitanteFrame extends JFrame {
             new VigilantePaqueteFrame(idSesion).setVisible(true);
         });
 
-        volverButton.addActionListener(e -> dispose());  // O ajustar para cerrar sesión
+        volverButton.addActionListener(e -> dispose());
+    }
+
+    private void mostrarTablaVisitantes(String sql) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/conjunto", "root", "Jj10302526");
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            String[] columnNames = {"ID Visitante", "Nombres", "Apellidos", "Fecha Entrada"};
+            Object[][] data = new Object[100][4];
+            int row = 0;
+            while (rs.next() && row < 100) {
+                data[row][0] = rs.getInt("idVisitante");
+                data[row][1] = rs.getString("nombres");
+                data[row][2] = rs.getString("apellidos");
+                data[row][3] = rs.getTimestamp("fechaDeEntrada");
+                row++;
+            }
+            
+            JTable table = new JTable(data, columnNames);
+            JScrollPane scrollPane = new JScrollPane(table);
+            JFrame tableFrame = new JFrame("Lista de Visitantes");
+            tableFrame.add(scrollPane);
+            tableFrame.setSize(600, 400);
+            tableFrame.setVisible(true);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+        }
     }
 }

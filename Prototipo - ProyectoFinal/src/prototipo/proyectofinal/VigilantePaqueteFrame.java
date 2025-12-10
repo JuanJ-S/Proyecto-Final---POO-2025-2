@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class VigilantePaqueteFrame extends JFrame {
     private int idSesion;
@@ -12,13 +13,13 @@ public class VigilantePaqueteFrame extends JFrame {
         this.idSesion = idSesion;
         setTitle("Gestión de Paquetes - Vigilante");
         setSize(400, 300);
-        setLayout(new GridLayout(6, 1));  // Cambiar a 6 filas para acomodar el nuevo botón
+        setLayout(new GridLayout(6, 1));
 
         JButton registrarButton = new JButton("Registrar Paquete");
         JButton confirmarEntregadoButton = new JButton("Confirmar Entregado");
         JButton registrarEntregaButton = new JButton("Registrar Entrega");
         JButton consultarButton = new JButton("Consultar Paquete");
-        JButton irAVisitantesButton = new JButton("Ir a Visitantes");  // Nuevo botón
+        JButton irAVisitantesButton = new JButton("Ir a Visitantes");
         JButton volverButton = new JButton("Volver al Menú Principal");
 
         add(registrarButton);
@@ -29,7 +30,6 @@ public class VigilantePaqueteFrame extends JFrame {
         add(volverButton);
 
         registrarButton.addActionListener(e -> {
-            // Formulario para registrar paquete
             JTextField remitenteField = new JTextField();
             JTextField destinatarioField = new JTextField();
             JTextField idDestinoField = new JTextField();
@@ -53,7 +53,7 @@ public class VigilantePaqueteFrame extends JFrame {
             if (idPaqueteStr != null) {
                 try {
                     int idPaquete = Integer.parseInt(idPaqueteStr);
-                    BaseDeDatos.registrarEntrega(idPaquete);  // Nuevo método
+                    BaseDeDatos.registrarEntrega(idPaquete);
                     JOptionPane.showMessageDialog(null, "Entrega registrada.");
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "ID inválido.");
@@ -63,17 +63,46 @@ public class VigilantePaqueteFrame extends JFrame {
 
         consultarButton.addActionListener(e -> {
             String destino = JOptionPane.showInputDialog("Ingresa ID Destino:");
-            JOptionPane.showMessageDialog(null, "Lista de paquetes para destino " + destino + " (implementar JTable aquí).");
+            if (destino != null) {
+                mostrarTablaPaquetes("SELECT idPaquete, remitente, fechaDeLlegada, isEntregado FROM paquete WHERE idDestino = " + destino);
+            }
         });
 
         irAVisitantesButton.addActionListener(e -> {
-            dispose();  // Cerrar ventana actual
-            new VigilanteVisitanteFrame(idSesion).setVisible(true);  // Abrir Visitantes
+            dispose();
+            new VigilanteVisitanteFrame(idSesion).setVisible(true);
         });
 
         volverButton.addActionListener(e -> {
             dispose();
-            new LoginFrame().setVisible(true);  // O ajustar para cerrar sesión
+            new LoginFrame().setVisible(true);
         });
+    }
+
+    private void mostrarTablaPaquetes(String sql) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/conjunto", "root", "Jj10302526");
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            String[] columnNames = {"ID Paquete", "Remitente", "Fecha Llegada", "Entregado"};
+            Object[][] data = new Object[100][4];
+            int row = 0;
+            while (rs.next() && row < 100) {
+                data[row][0] = rs.getInt("idPaquete");
+                data[row][1] = rs.getString("remitente");
+                data[row][2] = rs.getTimestamp("fechaDeLlegada");
+                data[row][3] = rs.getBoolean("isEntregado") ? "Sí" : "No";
+                row++;
+            }
+            
+            JTable table = new JTable(data, columnNames);
+            JScrollPane scrollPane = new JScrollPane(table);
+            JFrame tableFrame = new JFrame("Lista de Paquetes");
+            tableFrame.add(scrollPane);
+            tableFrame.setSize(600, 400);
+            tableFrame.setVisible(true);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+        }
     }
 }
