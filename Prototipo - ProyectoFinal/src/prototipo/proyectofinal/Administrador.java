@@ -1,21 +1,73 @@
 package prototipo.proyectofinal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Administrador extends Usuario implements ConsultarBD{
-    
+    private Scanner scanner = new Scanner(System.in);
     //Métodos Personalizados
     
     public void consultarApto(){
-        throw new UnsupportedOperationException("ConsultarApto Not supported yet.");
+        int torre = 0;
+        int numero = 0;
+        System.out.print("Digita la torre del apto: ");
+        torre = scanner.nextInt();
+        System.out.print("\nDigita el numero del apto: ");
+        numero = scanner.nextInt();
+        System.out.print(BaseDeDatos.consultarApto(torre, numero));
     }
     public void consultarResidente(){
-        throw new UnsupportedOperationException("ConsultarResidente Not supported yet.");
+        int torre = 0;
+        int numero = 0;
+        int idApto = 0;
+        System.out.print("Digita la torre del apto: ");
+        torre = scanner.nextInt();
+        System.out.print("\nDigita el numero del apto: ");
+        numero = scanner.nextInt();
+        idApto = BaseDeDatos.obtenerIdApto(torre, numero);
+        System.out.print(BaseDeDatos.consultarResidente(idApto));
     }
     public void registrarApto(){
-        throw new UnsupportedOperationException("RegistrarApto Not supported yet.");
+        int torre = 0;
+        int numero = 0;
+        String propietario = null;
+        int idPropietario = 0;
+        boolean isArrendado = false;
+        System.out.print("Ingrese la torre del apartamento: ");
+        torre = scanner.nextInt();
+        System.out.print("Ingrese el número del Apartamento: ");
+        numero = scanner.nextInt();
+        System.out.print("Ingrese el nombre del propietario: ");
+        scanner.next(); //Limpiar\n de nextInt
+        propietario = scanner.next();
+        System.out.print("Ingrese ID del propietario: ");
+        idPropietario = scanner.nextInt();
+        System.out.print("¿El apartamento esta arrendado? (1. si  2.no): ");
+        isArrendado = scanner.nextBoolean();
+        BaseDeDatos.registrarApto(torre, numero, propietario, idPropietario, isArrendado);
     }
     public void registrarResidente(){
-        throw new UnsupportedOperationException("registrarResidente Not supported yet.");
+        int torre = 0;
+        int numero = 0;
+        int idApto = 0;
+        String nombres = null;
+        String apellidos = null;
+        int idResidente = 0;
+        int idSesion = 0;
+        System.out.print("Digita la torre del apto: ");
+        torre = scanner.nextInt();
+        System.out.print("\nDigita el numero del apto: ");
+        numero = scanner.nextInt();
+        idApto = BaseDeDatos.obtenerIdApto(torre, numero);
+        System.out.print("Ingrese los nombres del residente: ");
+        nombres = scanner.next();
+        System.out.print("Ingrese los apellidos del residente: ");
+        apellidos = scanner.next();
+        System.out.print("Ingrese el ID del residente: ");
+        idResidente = scanner.nextInt();
+        System.out.print("Ingrese el ID de Sesion del residente: ");
+        idSesion = scanner.nextInt();
+        BaseDeDatos.registrarResidente(nombres, Apellidos, idResidente, idApto, idSesion);
     }
     
     //Métodos Heredados
@@ -53,12 +105,45 @@ public class Administrador extends Usuario implements ConsultarBD{
     
     @Override
     public void consultarVisitantes() {
-        throw new UnsupportedOperationException("ConsultarVisitantes Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int torre = 0;
+        int numero = 0;
+        int idApto = 0;
+        System.out.print("Digita la torre del apto: ");
+        torre = scanner.nextInt();
+        System.out.print("\nDigita el numero del apto: ");
+        numero = scanner.nextInt();
+        idApto = BaseDeDatos.obtenerIdApto(torre, numero);
+        BaseDeDatos.consultarVisitantes(idApto);
     }
 
     @Override
     public void consultarPaquetes() {
-        throw new UnsupportedOperationException("Consultar Paquetes Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int torre = 0;
+        int numero = 0;
+        int idApto = 0;
+        int opcion = 0;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        System.out.print("Digita la torre del apto: ");
+        torre = scanner.nextInt();
+        System.out.print("\nDigita el numero del apto: ");
+        numero = scanner.nextInt();
+        idApto = BaseDeDatos.obtenerIdApto(torre, numero);
+        do{
+            System.out.println("1. Ver todos los paquetes\n2.Ver paquetes por día");
+            opcion = scanner.nextInt();
+            if(opcion != 1 & opcion != 2){
+                System.out.println("Opcion Invalida vuelve a digitar");
+            }
+        } while(opcion != 1 & opcion != 2);
+        if(opcion == 1){
+            BaseDeDatos.consultarPaquetes(idApto);
+        } else if(opcion == 2){
+            LocalDateTime dia = null;
+            System.out.print("Ingresa la fecha que quieres consultar (Formato: AAAA-MM-DD HH:MM:SS): ");
+            String input = scanner.nextLine();
+            dia = LocalDateTime.parse(input, formatter);
+            BaseDeDatos.consultarPaquetesPorDia(idApto, dia);
+        }
     }
     
     //Contructores

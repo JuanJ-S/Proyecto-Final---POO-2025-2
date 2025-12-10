@@ -105,16 +105,16 @@ public class BaseDeDatos {
     public static String consultarVisitasPendientes(int idApto) {
         StringBuilder resultado = new StringBuilder();
         // Corregido: Agregar filtro para visitas activas (sin salida)
-        String sql = "SELECT idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE idDestino = ? AND isAprobado = false AND fechaDesalida IS NULL;";
+        String sql = "SELECT idVisitante, nombres, apellidos, fechaEntrada FROM visitante WHERE idDestino = ? AND isAprobado = false AND fechaDesalida IS NULL;";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 // Usar índices correctos (1: idVisitante, 2: nombres, 3: apellidos, 4: fechaDeEntrada)
-                resultado.append("ID: ").append(rs.getInt(1))
-                        .append(", Nombre: ").append(rs.getString(2)).append(" ").append(rs.getString(3))
-                        .append(", Entrada: ").append(rs.getTimestamp(4)).append("\n");
+                resultado.append("ID: ").append(rs.getInt("idVisitante"))
+                        .append(", Nombre: ").append(rs.getString("nombres")).append(" ").append(rs.getString(3))
+                        .append(", Entrada: ").append(rs.getTimestamp("fechaEntrada")).append("\n");
             }
         } catch (Exception e) {
             resultado.append("Error: ").append(e.getMessage());
@@ -238,6 +238,78 @@ public class BaseDeDatos {
         try(Connection con = DriverManager.getConnection(url, user, password);
         PreparedStatement ps = con.prepareStatement(sql);){
             ps.setInt(1, idPaquete);
+            ps.executeUpdate();
+        } catch(Exception e){
+            System.out.println("Error: "+e);
+        }
+    }
+    
+    //Funciones para Administrador
+    public static String consultarApto(int torre, int numero) {
+        StringBuilder resultado = new StringBuilder();
+        String sql = "select * from apto where torre = ? and numero = ?";
+        try (Connection con = DriverManager.getConnection(url, user, password);
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, torre);
+            ps.setInt(2, numero);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                resultado.append("ID Apartamento: ").append(rs.getInt(1))
+                        .append(", Torre: ").append(rs.getInt(2))
+                        .append(", Número: ").append(rs.getInt(3))
+                        .append(", Propietario: ").append(rs.getString(4))
+                        .append(", ID Propietario: ").append(rs.getInt(5))
+                        .append(", Esta Arrendado: ").append(rs.getBoolean(6) ? "Si" : "No").append("\n");
+            }
+        } catch (Exception e) {
+            resultado.append("Error: ").append(e.getMessage());
+        }
+        return resultado.toString();
+    }
+    
+    public static String consultarResidente(int idApto) {
+        StringBuilder resultado = new StringBuilder();
+        String sql = "select * from residente where idApto = ?";
+        try (Connection con = DriverManager.getConnection(url, user, password);
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idApto);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                resultado.append("Nombres: ").append(rs.getString(1))
+                        .append(", Apellidos: ").append(rs.getString(2))
+                        .append(", ID Residente: ").append(rs.getInt(3))
+                        .append(", ID Apartamento: ").append(rs.getInt(4)).append("\n");
+            }
+        } catch (Exception e) {
+            resultado.append("Error: ").append(e.getMessage());
+        }
+        return resultado.toString();
+    }
+    
+    public static void registrarApto(int torre, int numero, String propietario, int idPropietario, boolean isArrendado){
+        String sql = "insert into apto values(null,?,?,?,?,?)";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, torre);
+            ps.setInt(2, numero);
+            ps.setString(3, propietario);
+            ps.setInt(4, idPropietario);
+            ps.setBoolean(5, isArrendado);
+            ps.executeUpdate();
+        } catch(Exception e){
+            System.out.println("Error: "+e);
+        }
+    }
+    
+    public static void registrarResidente(String nombres, String apellidos, int idResidente, int idApto, int idSesion){
+        String sql = "insert into residente values(?,?,?,?,?)";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setString(1, nombres);
+            ps.setString(2, apellidos);
+            ps.setInt(3, idResidente);
+            ps.setInt(4, idApto);
+            ps.setInt(5, idSesion);
             ps.executeUpdate();
         } catch(Exception e){
             System.out.println("Error: "+e);
