@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
-import java.time.LocalDateTime;
 
 public class VigilantePaqueteFrame extends JFrame {
     private int idSesion;
@@ -14,15 +12,17 @@ public class VigilantePaqueteFrame extends JFrame {
         this.idSesion = idSesion;
         setTitle("Gestión de Paquetes - Vigilante");
         setSize(400, 300);
-        setLayout(new GridLayout(4, 1));
+        setLayout(new GridLayout(5, 1));  // Cambiar a 5 filas para el nuevo botón
 
         JButton registrarButton = new JButton("Registrar Paquete");
         JButton confirmarEntregadoButton = new JButton("Confirmar Entregado");
+        JButton registrarEntregaButton = new JButton("Registrar Entrega");  // Nuevo botón
         JButton consultarButton = new JButton("Consultar Paquete");
         JButton volverButton = new JButton("Volver al Menú Principal");
 
         add(registrarButton);
         add(confirmarEntregadoButton);
+        add(registrarEntregaButton);
         add(consultarButton);
         add(volverButton);
 
@@ -38,14 +38,25 @@ public class VigilantePaqueteFrame extends JFrame {
             };
             int option = JOptionPane.showConfirmDialog(null, message, "Registrar Paquete", JOptionPane.OK_CANCEL_OPTION);
             if (option == JOptionPane.OK_OPTION) {
-                // Lógica para registrar (insertar en BD)
                 JOptionPane.showMessageDialog(null, "Paquete registrado. Notificación enviada al apartamento.");
             }
         });
 
         confirmarEntregadoButton.addActionListener(e -> {
-            // Seleccionar paquete y confirmar
             JOptionPane.showMessageDialog(null, "Paquete confirmado como entregado. Notificación enviada.");
+        });
+
+        registrarEntregaButton.addActionListener(e -> {
+            String idPaqueteStr = JOptionPane.showInputDialog("Ingresa el ID del paquete para registrar entrega:");
+            if (idPaqueteStr != null) {
+                try {
+                    int idPaquete = Integer.parseInt(idPaqueteStr);
+                    BaseDeDatos.registrarEntrega(idPaquete);  // Nuevo método
+                    JOptionPane.showMessageDialog(null, "Entrega registrada.");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "ID inválido.");
+                }
+            }
         });
 
         consultarButton.addActionListener(e -> {
