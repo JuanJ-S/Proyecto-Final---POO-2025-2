@@ -105,7 +105,7 @@ public class BaseDeDatos {
     public static String consultarVisitasPendientes(int idApto) {
         StringBuilder resultado = new StringBuilder();
         // Corregido: Agregar filtro para visitas activas (sin salida)
-        String sql = "SELECT idVisitante, nombres, apellidos, fechaEntrada FROM visitante WHERE idDestino = ? AND isAprobado = false AND fechaDesalida IS NULL;";
+        String sql = "SELECT idVisitante, nombres, apellidos, fechaEntrada FROM visitante WHERE idDestino = ? AND isAprobado = false AND fechaSalida IS NULL;";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
