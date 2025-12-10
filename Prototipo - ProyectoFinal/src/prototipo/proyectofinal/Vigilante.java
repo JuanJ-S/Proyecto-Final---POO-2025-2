@@ -27,10 +27,16 @@ public class Vigilante extends Usuario{
         BaseDeDatos.registrarVisitante(idVisitante, nombres, apellidos, idDestino);
     }
     public void registrarSalida(){
-        throw new UnsupportedOperationException("RegistrarSalida Not supported yet.");
+        int idVisitante = 0;
+        System.out.print("Ingresa el ID del visitante: ");
+        idVisitante = scanner.nextInt();
+        BaseDeDatos.registrarSalida(idVisitante);
     }
     public void registrarEntrega(){
-        throw new UnsupportedOperationException("RegistrarEntrega Not supported yet.");
+        int idPaquete = 0;
+        System.out.print("Ingresa el ID del Paquete: ");
+        idPaquete = scanner.nextInt();
+        BaseDeDatos.registrarEntrega(idPaquete);
     }
     //Métodos Heredados
     @Override

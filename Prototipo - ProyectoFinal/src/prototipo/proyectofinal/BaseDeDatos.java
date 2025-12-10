@@ -121,7 +121,7 @@ public class BaseDeDatos {
     }
 
     public static void aprobarVisita(int idApto, int idVisitante) {
-        String sql = "UPDATE visitante SET isAprobado = true WHERE idVisitante = ? AND idDestino = ?";
+        String sql = "UPDATE visitante SET isAprobado = true, fechaEntrada = now() WHERE idVisitante = ? AND idDestino = ?";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idVisitante);
@@ -219,5 +219,25 @@ public class BaseDeDatos {
             System.out.println("Error: "+e);
         }
         return idApto;
+    }
+    public static void registrarSalida(int idVisitante){
+        String sql = "update visitante set fechaSalida = now() where idVisitante = ?";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, idVisitante);
+            ps.executeUpdate();
+        } catch(Exception e){
+            System.out.println("Error: "+e);
+        }
+    }
+    public static void registrarEntrega(int idPaquete){
+        String sql = "update paquete set fechaEntrega = now() where idSistema = ?";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, idPaquete);
+            ps.executeUpdate();
+        } catch(Exception e){
+            System.out.println("Error: "+e);
+        }
     }
 }
