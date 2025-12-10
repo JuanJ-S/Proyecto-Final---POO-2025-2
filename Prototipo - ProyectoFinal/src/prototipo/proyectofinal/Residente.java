@@ -41,12 +41,12 @@ public class Residente extends Usuario implements ConsultarBD{
     }
 
     @Override
-    public void consultarVisitantes() {
+    private void consultarVisitantes() {
         System.out.print(BaseDeDatos.consultarVisitantes(idApto));
     }
 
     @Override
-    public void consultarPaquetes() {
+    private void consultarPaquetes() {
         int opcion = 0;
         do{
             System.out.print("1. Consultar Todos los Paquetes\n\t2.Consultar Paquetes por día");
