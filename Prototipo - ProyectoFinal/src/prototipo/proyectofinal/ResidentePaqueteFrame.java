@@ -38,13 +38,13 @@ public class ResidentePaqueteFrame extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
 
         consultarTodosButton.addActionListener(e -> {
-            mostrarTablaPaquetes("SELECT idPaquete, remitente, fechaDeLlegada, isEntregado FROM paquete WHERE idDestino = " + residente.getIdApto());
+            mostrarTablaPaquetes("SELECT idSistema, remitente, fechaLlegada, isEntregado FROM paquete WHERE idDestino = " + residente.getIdApto());
         });
 
         consultarPorDiaButton.addActionListener(e -> {
             String dia = JOptionPane.showInputDialog("Ingresa el día (YYYY-MM-DD):");
             if (dia != null) {
-                mostrarTablaPaquetes("SELECT idPaquete, remitente, fechaDeLlegada, isEntregado FROM paquete WHERE idDestino = " + residente.getIdApto() + " AND DATE(fechaDeLlegada) = '" + dia + "'");
+                mostrarTablaPaquetes("SELECT idSistema, remitente, fechaLlegada, isEntregado FROM paquete WHERE idDestino = " + residente.getIdApto() + " AND DATE(fechaLlegada) = '" + dia + "'");
             }
         });
 
@@ -68,9 +68,9 @@ public class ResidentePaqueteFrame extends JFrame {
             Object[][] data = new Object[100][4];  // Ajusta tamaño si tienes más filas
             int row = 0;
             while (rs.next() && row < 100) {
-                data[row][0] = rs.getInt("idPaquete");
+                data[row][0] = rs.getInt("idSistema");
                 data[row][1] = rs.getString("remitente");
-                data[row][2] = rs.getTimestamp("fechaDeLlegada");
+                data[row][2] = rs.getTimestamp("fechaLlegada");
                 data[row][3] = rs.getBoolean("isEntregado") ? "Sí" : "No";
                 row++;
             }

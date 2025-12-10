@@ -62,7 +62,7 @@ public class BaseDeDatos {
         //Atributos del retorno
         String nombres = null;
         String apellidos = null;
-        String sql = "Select * from usuario where idSesion = ?"; //Comando SQL
+        String sql = "Select * from usuario where idSesion = ?;"; //Comando SQL
         try(Connection con = DriverManager.getConnection(url, user, password);
         PreparedStatement ps = con.prepareStatement(sql);){
             ps.setInt(1, idSistema);
@@ -84,7 +84,7 @@ public class BaseDeDatos {
         //Atributos del retorno
         String nombres = null;
         String apellidos = null;
-        String sql = "Select * from usuario where idSesion = ?"; //Comando SQL
+        String sql = "Select * from usuario where idSesion = ?;"; //Comando SQL
         try(Connection con = DriverManager.getConnection(url, user, password);
         PreparedStatement ps = con.prepareStatement(sql);){
             ps.setInt(1, idSistema);
@@ -123,7 +123,7 @@ public class BaseDeDatos {
     }
 
     public static void aprobarVisita(int idApto, int idVisitante) {
-        String sql = "UPDATE visitante SET isAprobado = true, fechaEntrada = now() WHERE idVisitante = ? AND idDestino = ?";
+        String sql = "UPDATE visitante SET isAprobado = true, fechaEntrada = now() WHERE idVisitante = ? AND idDestino = ?;";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idVisitante);
@@ -136,7 +136,7 @@ public class BaseDeDatos {
 
     public static String consultarVisitantes(int idApto) {
         StringBuilder resultado = new StringBuilder();
-        String sql = "SELECT idVisitante, nombres, apellidos, fechaEntrada, fechasalida FROM visitante WHERE idDestino = ?";
+        String sql = "SELECT idVisitante, nombres, apellidos, fechaEntrada, fechasalida FROM visitante WHERE idDestino = ?;";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
@@ -155,7 +155,7 @@ public class BaseDeDatos {
 
     public static String consultarPaquetes(int idApto) {
         StringBuilder resultado = new StringBuilder();
-        String sql = "SELECT idSistema, remitente, fechaLlegada, isEntregado FROM paquete WHERE idDestino = ?";
+        String sql = "select idSistema, fechaLlegada, isEntregado from paquete where idDestino ?;";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
@@ -174,7 +174,7 @@ public class BaseDeDatos {
 
     public static String consultarPaquetesPorDia(int idApto, String dia) {
         StringBuilder resultado = new StringBuilder();
-        String sql = "SELECT idSistema, remitente, fechaLlegada, isEntregado FROM paquete WHERE idDestino = ? AND DATE(fechaLlegada) = ?";
+        String sql = "SELECT idSistema, remitente, fechaLlegada, isEntregado FROM paquete WHERE idDestino = ? AND DATE(fechaLlegada) = ?;";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
