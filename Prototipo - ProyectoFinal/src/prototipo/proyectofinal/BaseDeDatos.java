@@ -155,42 +155,64 @@ public class BaseDeDatos {
 
     public static String consultarPaquetes(int idApto) {
         StringBuilder resultado = new StringBuilder();
-        String sql = "select idSistema, fechaLlegada, isEntregado from paquete where idDestino ?;";
+        // CORRECCIÓN CLAVE: Agregado '=' después de idDestino y seleccionado remitente/destinatario.
+        String sql = "SELECT idSistema, remitente, destinatario, fechaLlegada, isEntregado FROM paquete WHERE idDestino = ?;";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
             ResultSet rs = ps.executeQuery();
+            
+            // Encabezado para la lista
+            resultado.append("ID | Remitente | Destinatario | Llegada | Entregado\n");
+            resultado.append("------------------------------------------------------------------------\n");
+
             while (rs.next()) {
-                resultado.append("ID: ").append(rs.getInt("idSistema"))
-                        .append(", Remitente: ").append(rs.getString("remitente"))
-                        .append(", Llegada: ").append(rs.getTimestamp("fechaLlegada"))
-                        .append(", Entregado: ").append(rs.getBoolean("isEntregado") ? "Sí" : "No").append("\n");
+                resultado.append(rs.getInt("idSistema")).append(" | ")
+                         .append(rs.getString("remitente")).append(" | ")
+                         .append(rs.getString("destinatario")).append(" | ")
+                         .append(rs.getTimestamp("fechaLlegada")).append(" | ")
+                         .append(rs.getBoolean("isEntregado") ? "Sí" : "No").append("\n");
             }
         } catch (Exception e) {
-            resultado.append("Error: ").append(e.getMessage());
+            resultado.append("\n!!! Error de conexión/consulta: ").append(e.getMessage()).append("\n");
         }
         return resultado.toString();
     }
 
-    public static String consultarPaquetesPorDia(int idApto, String dia) {
-        StringBuilder resultado = new StringBuilder();
-        String sql = "SELECT idSistema, remitente, fechaLlegada, isEntregado FROM paquete WHERE idDestino = ? AND DATE(fechaLlegada) = ?;";
-        try (Connection con = DriverManager.getConnection(url, user, password);
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, idApto);
-            ps.setString(2, dia);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                resultado.append("ID: ").append(rs.getInt("idSistema"))
-                        .append(", Remitente: ").append(rs.getString("remitente"))
-                        .append(", Llegada: ").append(rs.getTimestamp("fechaLlegada"))
-                        .append(", Entregado: ").append(rs.getBoolean("isEntregado") ? "Sí" : "No").append("\n");
-            }
-        } catch (Exception e) {
-            resultado.append("Error: ").append(e.getMessage());
+   public static String consultarPaquetesPorDia(int idApto, String dia) {
+    StringBuilder resultado = new StringBuilder();
+    
+    
+    String sql = "SELECT idSistema, remitente, destinatario, fechaLlegada, isEntregado FROM paquete WHERE idDestino = ? AND DATE(fechaLlegada) = ?;";
+    
+    
+    try (Connection con = DriverManager.getConnection(url, user, password);
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        
+        ps.setInt(1, idApto);
+        ps.setString(2, dia);
+        ResultSet rs = ps.executeQuery();
+        
+        // Encabezado para la lista
+        resultado.append("ID | Remitente | Destinatario | Llegada | Entregado\n");
+        resultado.append("------------------------------------------------------------------------\n");
+        
+        while (rs.next()) {
+            
+            resultado.append(rs.getInt("idSistema")).append(" | ")
+                     .append(rs.getString("remitente")).append(" | ")
+                     .append(rs.getString("destinatario")).append(" | ")
+                     .append(rs.getTimestamp("fechaLlegada")).append(" | ")
+                     .append(rs.getBoolean("isEntregado") ? "Sí" : "No").append("\n");
         }
-        return resultado.toString();
+    } catch (SQLException e) {
+        
+        resultado.append("\n!!! Error SQL: ").append(e.getMessage()).append(" - Código de error: ").append(e.getErrorCode()).append("\n");
+    } catch (Exception e) {
+        resultado.append("\n!!! Error Inesperado: ").append(e.getMessage()).append("\n");
     }
+    return resultado.toString();
+}
     
     //Funciones Vigilante
     public static void registrarVisitante(int idVisitante, String nombres, String apellidos, int idDestino){

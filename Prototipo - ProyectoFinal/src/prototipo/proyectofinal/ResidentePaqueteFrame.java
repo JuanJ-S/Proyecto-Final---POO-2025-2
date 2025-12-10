@@ -2,14 +2,11 @@ package prototipo.proyectofinal;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.*;
 
 public class ResidentePaqueteFrame extends JFrame {
     private int idSesion;
     private Residente residente;
-
+    private JTextArea paquetesArea; 
     public ResidentePaqueteFrame(int idSesion) {
         this.idSesion = idSesion;
         this.residente = BaseDeDatos.construirResidente(idSesion);
@@ -18,10 +15,13 @@ public class ResidentePaqueteFrame extends JFrame {
         setLayout(new BorderLayout());
 
         JPanel panel = new JPanel(new BorderLayout());
-        JTextArea paquetesArea = new JTextArea();
+        paquetesArea = new JTextArea(); // Inicialización
         paquetesArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(paquetesArea);
         panel.add(scrollPane, BorderLayout.CENTER);
+
+        
+        cargarPaquetes(paquetesArea, residente.getIdApto(), null); 
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton consultarTodosButton = new JButton("Consultar Todos los Paquetes");
@@ -37,14 +37,15 @@ public class ResidentePaqueteFrame extends JFrame {
         add(panel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
+        
         consultarTodosButton.addActionListener(e -> {
-            mostrarTablaPaquetes("SELECT idSistema, remitente, fechaLlegada, isEntregado FROM paquete WHERE idDestino = " + residente.getIdApto());
+            cargarPaquetes(paquetesArea, residente.getIdApto(), null);
         });
 
         consultarPorDiaButton.addActionListener(e -> {
             String dia = JOptionPane.showInputDialog("Ingresa el día (YYYY-MM-DD):");
-            if (dia != null) {
-                mostrarTablaPaquetes("SELECT idSistema, remitente, fechaLlegada, isEntregado FROM paquete WHERE idDestino = " + residente.getIdApto() + " AND DATE(fechaLlegada) = '" + dia + "'");
+            if (dia != null && !dia.trim().isEmpty()) {
+                cargarPaquetes(paquetesArea, residente.getIdApto(), dia);
             }
         });
 
@@ -59,30 +60,28 @@ public class ResidentePaqueteFrame extends JFrame {
         });
     }
 
-    private void mostrarTablaPaquetes(String sql) {
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/conjunto", "root", "Jj10302526");
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            
-            String[] columnNames = {"ID Paquete", "Remitente", "Fecha Llegada", "Entregado"};
-            Object[][] data = new Object[100][4];  // Ajusta tamaño si tienes más filas
-            int row = 0;
-            while (rs.next() && row < 100) {
-                data[row][0] = rs.getInt("idSistema");
-                data[row][1] = rs.getString("remitente");
-                data[row][2] = rs.getTimestamp("fechaLlegada");
-                data[row][3] = rs.getBoolean("isEntregado") ? "Sí" : "No";
-                row++;
-            }
-            
-            JTable table = new JTable(data, columnNames);
-            JScrollPane scrollPane = new JScrollPane(table);
-            JFrame tableFrame = new JFrame("Lista de Paquetes");
-            tableFrame.add(scrollPane);
-            tableFrame.setSize(600, 400);
-            tableFrame.setVisible(true);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+    /**
+     * Llama a BaseDeDatos para obtener los paquetes y actualiza el JTextArea.
+     * @param area El JTextArea a actualizar.
+     * @param idApto El ID del apartamento del residente.
+     * @param dia Si es null, consulta todos; si tiene fecha, consulta por día.
+     */
+    private void cargarPaquetes(JTextArea area, int idApto, String dia) {
+        String resultado;
+        if (dia == null) {
+            resultado = BaseDeDatos.consultarPaquetes(idApto);
+        } else {
+            resultado = BaseDeDatos.consultarPaquetesPorDia(idApto, dia);
+        }
+        
+        // Verifica si la consulta fue exitosa
+        if (resultado.contains("!!! Error")) {
+            JOptionPane.showMessageDialog(this, resultado, "Error de Consulta", JOptionPane.ERROR_MESSAGE);
+            area.setText("Error al cargar paquetes. Verifique la conexión a la base de datos.");
+        } else if (resultado.isEmpty() || resultado.equals("ID | Remitente | Destinatario | Llegada | Entregado\n------------------------------------------------------------------------\n")) {
+            area.setText("No se encontraron paquetes para este criterio.");
+        } else {
+            area.setText("--- PAQUETES REGISTRADOS ---\n\n" + resultado);
         }
     }
 }
