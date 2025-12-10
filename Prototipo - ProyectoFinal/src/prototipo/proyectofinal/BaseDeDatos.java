@@ -104,13 +104,14 @@ public class BaseDeDatos {
     // Métodos nuevos para compatibilidad con Residente y GUI
     public static String consultarVisitasPendientes(int idApto) {
         StringBuilder resultado = new StringBuilder();
-        String sql = "SELECT idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE idDestino = ? AND isAprobado = false;";
+        // Corregido: Agregar filtro para visitas activas (sin salida)
+        String sql = "SELECT idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE idDestino = ? AND isAprobado = false AND fechaDesalida IS NULL;";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                // Corregido: Usar índices correctos (1: idVisitante, 2: nombres, 3: apellidos, 4: fechaDeEntrada)
+                // Usar índices correctos (1: idVisitante, 2: nombres, 3: apellidos, 4: fechaDeEntrada)
                 resultado.append("ID: ").append(rs.getInt(1))
                         .append(", Nombre: ").append(rs.getString(2)).append(" ").append(rs.getString(3))
                         .append(", Entrada: ").append(rs.getTimestamp(4)).append("\n");
@@ -204,5 +205,22 @@ public class BaseDeDatos {
         } catch(Exception e){
             System.out.println("Error: "+e);
         }
+    }
+
+    public static int obtenerIdApto(int torre, int numero){
+        int idApto = 0;
+        String sql = "select idApto from apto where torre = ? and numero = ?";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(sql);){
+            ps.setInt(1, torre);
+            ps.setInt(2, numero);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                idApto = rs.getInt(1);
+            }
+        } catch(Exception e){
+            System.out.println("Error: "+e);
+        }
+        return idApto;
     }
 }

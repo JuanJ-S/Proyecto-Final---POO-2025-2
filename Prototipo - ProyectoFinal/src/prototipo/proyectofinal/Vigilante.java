@@ -2,11 +2,29 @@ package prototipo.proyectofinal;
 import java.util.Scanner;
 
 public class Vigilante extends Usuario{
-    
+    private Scanner scanner  = new Scanner(System.in);
     //Métodos personalizados
     
     public void notificarEntrante(){
-        throw new UnsupportedOperationException("NotificarEntrante Not supported yet.");
+        int idVisitante = 0;
+        String nombres = null;
+        String apellidos = null;
+        int torre = 0;
+        int numero = 0;
+        int idDestino = 0;
+        System.out.print("Ingresa el ID del visitante: ");
+        idVisitante = scanner.nextInt();
+        System.out.print("Ingresa los nombres del Visitante: ");
+        scanner.next(); //Limpiar \n del nextInt
+        nombres = scanner.next();
+        System.out.print("Ingresa los apellidos del Visitante: ");
+        apellidos = scanner.next();
+        System.out.print("Ingresa la torre del apartamento de destino: ");
+        torre = scanner.nextInt();
+        System.out.println("Ingresa el número del apartamento de destino: ");
+        numero = scanner.nextInt();
+        idDestino = BaseDeDatos.obtenerIdApto(torre, numero);
+        BaseDeDatos.registrarVisitante(idVisitante, nombres, apellidos, idDestino);
     }
     public void registrarSalida(){
         throw new UnsupportedOperationException("RegistrarSalida Not supported yet.");
