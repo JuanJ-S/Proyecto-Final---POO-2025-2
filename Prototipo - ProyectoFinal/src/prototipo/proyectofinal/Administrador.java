@@ -122,7 +122,6 @@ import java.util.Scanner;
         int numero = 0;
         int idApto = 0;
         int opcion = 0;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         System.out.print("Digita la torre del apto: ");
         torre = scanner.nextInt();
         System.out.print("\nDigita el numero del apto: ");
