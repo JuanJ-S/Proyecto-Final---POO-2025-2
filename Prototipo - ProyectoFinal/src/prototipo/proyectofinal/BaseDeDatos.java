@@ -136,7 +136,7 @@ public class BaseDeDatos {
 
     public static String consultarVisitantes(int idApto) {
         StringBuilder resultado = new StringBuilder();
-        String sql = "SELECT idVisitante, nombres, apellidos, fechaDeEntrada, fechaDesalida FROM visitante WHERE idDestino = ?";
+        String sql = "SELECT idVisitante, nombres, apellidos, fechaEntrada, fechasalida FROM visitante WHERE idDestino = ?";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
@@ -144,8 +144,8 @@ public class BaseDeDatos {
             while (rs.next()) {
                 resultado.append("ID: ").append(rs.getInt("idVisitante"))
                         .append(", Nombre: ").append(rs.getString("nombres")).append(" ").append(rs.getString("apellidos"))
-                        .append(", Entrada: ").append(rs.getTimestamp("fechaDeEntrada"))
-                        .append(", Salida: ").append(rs.getTimestamp("fechaDesalida") != null ? rs.getTimestamp("fechaDesalida") : "Pendiente").append("\n");
+                        .append(", Entrada: ").append(rs.getTimestamp("fechaEntrada"))
+                        .append(", Salida: ").append(rs.getTimestamp("fechasalida") != null ? rs.getTimestamp("fechasalida") : "Pendiente").append("\n");
             }
         } catch (Exception e) {
             resultado.append("Error: ").append(e.getMessage());
@@ -155,15 +155,15 @@ public class BaseDeDatos {
 
     public static String consultarPaquetes(int idApto) {
         StringBuilder resultado = new StringBuilder();
-        String sql = "SELECT idPaquete, remitente, fechaDeLlegada, isEntregado FROM paquete WHERE idDestino = ?";
+        String sql = "SELECT idSistema, remitente, fechaLlegada, isEntregado FROM paquete WHERE idDestino = ?";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                resultado.append("ID: ").append(rs.getInt("idPaquete"))
+                resultado.append("ID: ").append(rs.getInt("idSistema"))
                         .append(", Remitente: ").append(rs.getString("remitente"))
-                        .append(", Llegada: ").append(rs.getTimestamp("fechaDeLlegada"))
+                        .append(", Llegada: ").append(rs.getTimestamp("fechaLlegada"))
                         .append(", Entregado: ").append(rs.getBoolean("isEntregado") ? "Sí" : "No").append("\n");
             }
         } catch (Exception e) {
@@ -174,16 +174,16 @@ public class BaseDeDatos {
 
     public static String consultarPaquetesPorDia(int idApto, String dia) {
         StringBuilder resultado = new StringBuilder();
-        String sql = "SELECT idPaquete, remitente, fechaDeLlegada, isEntregado FROM paquete WHERE idDestino = ? AND DATE(fechaDeLlegada) = ?";
+        String sql = "SELECT idSistema, remitente, fechaLlegada, isEntregado FROM paquete WHERE idDestino = ? AND DATE(fechaLlegada) = ?";
         try (Connection con = DriverManager.getConnection(url, user, password);
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idApto);
             ps.setString(2, dia);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                resultado.append("ID: ").append(rs.getInt("idPaquete"))
+                resultado.append("ID: ").append(rs.getInt("idSistema"))
                         .append(", Remitente: ").append(rs.getString("remitente"))
-                        .append(", Llegada: ").append(rs.getTimestamp("fechaDeLlegada"))
+                        .append(", Llegada: ").append(rs.getTimestamp("fechaLlegada"))
                         .append(", Entregado: ").append(rs.getBoolean("isEntregado") ? "Sí" : "No").append("\n");
             }
         } catch (Exception e) {
@@ -234,7 +234,7 @@ public class BaseDeDatos {
         }
     }
     public static void registrarEntrega(int idPaquete){
-        String sql = "update paquete set fechaEntrega = now() where idSistema = ?";
+        String sql = "update paquete set fechaEntrega = now(), isEntregado = true where idSistema = ?";
         try(Connection con = DriverManager.getConnection(url, user, password);
         PreparedStatement ps = con.prepareStatement(sql);){
             ps.setInt(1, idPaquete);
