@@ -41,12 +41,12 @@ public class Residente extends Usuario implements ConsultarBD{
     }
 
     @Override
-    private void consultarVisitantes() {
+    public void consultarVisitantes() {
         System.out.print(BaseDeDatos.consultarVisitantes(idApto));
     }
 
     @Override
-    private void consultarPaquetes() {
+    public void consultarPaquetes() {
         int opcion = 0;
         do{
             System.out.print("1. Consultar Todos los Paquetes\n\t2.Consultar Paquetes por día");
@@ -66,7 +66,7 @@ public class Residente extends Usuario implements ConsultarBD{
     
     //Constructores
 
-    private Residente() {
+    public Residente() {
     }
 
     public Residente(int idResidente, int idApto, String nombres, String Apellidos, int idSistema) {
