@@ -12,18 +12,20 @@ public class VigilantePaqueteFrame extends JFrame {
         this.idSesion = idSesion;
         setTitle("Gestión de Paquetes - Vigilante");
         setSize(400, 300);
-        setLayout(new GridLayout(5, 1));  // Cambiar a 5 filas para el nuevo botón
+        setLayout(new GridLayout(6, 1));  // Cambiar a 6 filas para acomodar el nuevo botón
 
         JButton registrarButton = new JButton("Registrar Paquete");
         JButton confirmarEntregadoButton = new JButton("Confirmar Entregado");
-        JButton registrarEntregaButton = new JButton("Registrar Entrega");  // Nuevo botón
+        JButton registrarEntregaButton = new JButton("Registrar Entrega");
         JButton consultarButton = new JButton("Consultar Paquete");
+        JButton irAVisitantesButton = new JButton("Ir a Visitantes");  // Nuevo botón
         JButton volverButton = new JButton("Volver al Menú Principal");
 
         add(registrarButton);
         add(confirmarEntregadoButton);
         add(registrarEntregaButton);
         add(consultarButton);
+        add(irAVisitantesButton);
         add(volverButton);
 
         registrarButton.addActionListener(e -> {
@@ -64,6 +66,14 @@ public class VigilantePaqueteFrame extends JFrame {
             JOptionPane.showMessageDialog(null, "Lista de paquetes para destino " + destino + " (implementar JTable aquí).");
         });
 
-        volverButton.addActionListener(e -> dispose());
+        irAVisitantesButton.addActionListener(e -> {
+            dispose();  // Cerrar ventana actual
+            new VigilanteVisitanteFrame(idSesion).setVisible(true);  // Abrir Visitantes
+        });
+
+        volverButton.addActionListener(e -> {
+            dispose();
+            new LoginFrame().setVisible(true);  // O ajustar para cerrar sesión
+        });
     }
 }

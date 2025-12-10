@@ -26,10 +26,12 @@ public class ResidentePaqueteFrame extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton consultarTodosButton = new JButton("Consultar Todos los Paquetes");
         JButton consultarPorDiaButton = new JButton("Consultar Paquetes por Día");
-        JButton volverButton = new JButton("Volver al Menú Principal");
+        JButton irAVisitantesButton = new JButton("Ir a Visitantes");  // Nuevo botón
+        JButton volverButton = new JButton("Cerrar Sesión");
 
         buttonPanel.add(consultarTodosButton);
         buttonPanel.add(consultarPorDiaButton);
+        buttonPanel.add(irAVisitantesButton);
         buttonPanel.add(volverButton);
 
         add(panel, BorderLayout.CENTER);
@@ -52,6 +54,14 @@ public class ResidentePaqueteFrame extends JFrame {
             }
         });
 
-        volverButton.addActionListener(e -> dispose());
+        irAVisitantesButton.addActionListener(e -> {
+            dispose();  // Cerrar ventana actual
+            new ResidenteVisitanteFrame(idSesion).setVisible(true);  // Abrir Visitantes
+        });
+
+        volverButton.addActionListener(e -> {
+            dispose();
+            new LoginFrame().setVisible(true);
+        });
     }
 }

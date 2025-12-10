@@ -41,16 +41,33 @@ public class LoginFrame extends JFrame {
 
                 Usuario usuario = null;
                 switch (rol) {
-                    case 1: usuario = new Administrador(); break;
-                    case 2: usuario = new Residente(); break;
-                    case 3: usuario = new Vigilante(); break;
+                    case 1:
+                        usuario = new Administrador();
+                        break;
+                    case 2:
+                        usuario = new Residente();
+                        break;
+                    case 3:
+                        usuario = new Vigilante();
+                        break;
                 }
 
                 boolean acceso = usuario.iniciarSesion(idSesion, contraseña, rol);
                 if (acceso) {
                     JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso.");
                     dispose(); // Cerrar login
-                    new MainFrame(rol, idSesion).setVisible(true); // Abrir menú principal
+                    // Saltar directamente al tercer menú basado en rol
+                    switch (rol) {
+                        case 1:
+                            new AdministradorFrame(idSesion).setVisible(true);
+                            break;
+                        case 2:
+                            new ResidenteVisitanteFrame(idSesion).setVisible(true);  // Ir directo a Visitante
+                            break;
+                        case 3:
+                            new VigilanteVisitanteFrame(idSesion).setVisible(true);  // Ir directo a Visitante
+                            break;
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Datos incorrectos. Intenta de nuevo.");
                 }
