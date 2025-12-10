@@ -17,7 +17,7 @@ public class ResidenteVisitanteFrame extends JFrame {
         // Se asume que BaseDeDatos.construirResidente(idSesion) funciona correctamente
         this.residente = BaseDeDatos.construirResidente(idSesion); 
         setTitle("Gestión de Visitantes - Residente");
-        setSize(400, 300);
+        setSize(800, 600);
         setLayout(new BorderLayout());
 
         JPanel panel = new JPanel(new BorderLayout());

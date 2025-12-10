@@ -14,7 +14,7 @@ public class VigilanteVisitanteFrame extends JFrame {
         setTitle("Gestión de Visitantes - Vigilante");
         
         // El layout ahora tiene 4 filas (antes 5): Registrar Entrada, Registrar Salida, Ir a Paquetes, Volver
-        setSize(400, 250); 
+        setSize(800, 500); 
         setLayout(new GridLayout(4, 1)); 
 
         JButton registrarButton = new JButton("Notificar Entrante (Registrar Visitante)");
