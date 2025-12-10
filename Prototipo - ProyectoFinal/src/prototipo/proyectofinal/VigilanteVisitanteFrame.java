@@ -12,22 +12,20 @@ public class VigilanteVisitanteFrame extends JFrame {
     public VigilanteVisitanteFrame(int idSesion) {
         this.idSesion = idSesion;
         setTitle("Gestión de Visitantes - Vigilante");
-        // Ajusta el tamaño ya que ahora hay menos botones (6 -> 5)
-        setSize(400, 300); 
-        // Cambia la cantidad de filas en el layout (6 -> 5)
-        setLayout(new GridLayout(5, 1)); 
+        
+        // El layout ahora tiene 4 filas (antes 5): Registrar Entrada, Registrar Salida, Ir a Paquetes, Volver
+        setSize(400, 250); 
+        setLayout(new GridLayout(4, 1)); 
 
         JButton registrarButton = new JButton("Notificar Entrante (Registrar Visitante)");
         JButton registrarSalidaButton = new JButton("Registrar Salida");
-        // *** SE ELIMINA ESTE BOTÓN: JButton registrarEntregaButton = new JButton("Registrar Entrega"); ***
-        JButton consultarButton = new JButton("Consultar Visitantes");
+        // *** SE ELIMINA ESTE BOTÓN: JButton consultarButton = new JButton("Consultar Visitantes"); ***
         JButton irAPaquetesButton = new JButton("Ir a Paquetes");
         JButton volverButton = new JButton("Volver al Menú Principal");
 
         add(registrarButton);
         add(registrarSalidaButton);
-        // *** SE ELIMINA LA ADICIÓN DEL BOTÓN: add(registrarEntregaButton); ***
-        add(consultarButton);
+        // *** SE ELIMINA LA ADICIÓN DEL BOTÓN: add(consultarButton); ***
         add(irAPaquetesButton);
         add(volverButton);
 
@@ -52,7 +50,8 @@ public class VigilanteVisitanteFrame extends JFrame {
                     String apellidos = apellidoField.getText();
                     int torre = Integer.parseInt(torreField.getText());
                     int numero = Integer.parseInt(numeroField.getText());
-                    int idDestino = BaseDeDatos.obtenerIdApto(torre, numero);
+                    // Se asume que BaseDeDatos existe y tiene estos métodos
+                    int idDestino = BaseDeDatos.obtenerIdApto(torre, numero); 
                     if (idDestino == 0) {
                         JOptionPane.showMessageDialog(null, "Apartamento no encontrado.");
                         return;
@@ -78,52 +77,17 @@ public class VigilanteVisitanteFrame extends JFrame {
             }
         });
 
-        consultarButton.addActionListener(e -> {
-            String[] options = {"Ver Visitantes Activos", "Consultar por Día"};
-            int choice = JOptionPane.showOptionDialog(null, "Elige una opción", "Consultar Visitantes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-            if (choice == 0) {
-                mostrarTablaVisitantes("SELECT idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE fechaDesalida IS NULL");
-            } else {
-                String dia = JOptionPane.showInputDialog("Ingresa el día (YYYY-MM-DD):");
-                if (dia != null) {
-                    mostrarTablaVisitantes("SELECT idVisitante, nombres, apellidos, fechaDeEntrada FROM visitante WHERE DATE(fechaDeEntrada) = '" + dia + "'");
-                }
-            }
-        });
+        // *** SE ELIMINA TODO EL ACTIONLISTENER ASOCIADO A consultarButton ***
 
         irAPaquetesButton.addActionListener(e -> {
             dispose();
             new VigilantePaqueteFrame(idSesion).setVisible(true);
         });
 
-        volverButton.addActionListener(e -> dispose());
+        // Este botón debería volver al MainFrame, pero si es el menú principal,
+        // asumo que debe cerrar la ventana. Si debe volver al Login, cámbialo.
+        volverButton.addActionListener(e -> dispose()); 
     }
-
-    private void mostrarTablaVisitantes(String sql) {
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/conjunto", "root", "Jj10302526");
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            
-            String[] columnNames = {"ID Visitante", "Nombres", "Apellidos", "Fecha Entrada"};
-            // El resto del método es el mismo...
-            Object[][] data = new Object[100][4];
-            int row = 0;
-            while (rs.next() && row < 100) {
-                data[row][0] = rs.getInt("idVisitante");
-                data[row][1] = rs.getString("nombres");
-                data[row][2] = rs.getString("apellidos");
-                data[row][3] = rs.getTimestamp("fechaDeEntrada");
-                row++;
-            }
-            
-            JTable table = new JTable(data, columnNames);
-            JScrollPane scrollPane = new JScrollPane(table);
-            JFrame tableFrame = new JFrame("Lista de Visitantes");
-            tableFrame.add(scrollPane);
-            tableFrame.setSize(600, 400);
-            tableFrame.setVisible(true);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
-        }
-    }
+    
+    // *** SE ELIMINA EL MÉTODO private void mostrarTablaVisitantes(String sql) ***
 }
