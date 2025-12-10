@@ -13,25 +13,25 @@ public class VigilantePaqueteFrame extends JFrame {
         this.idSesion = idSesion;
         setTitle("Gestión de Paquetes - Vigilante");
         
-        // Tamaño aumentado (500x350) y ajustado a 5 filas.
+        
         setSize(1000, 700); 
         setLayout(new GridLayout(5, 1)); 
 
         JButton registrarButton = new JButton("Registrar Paquete");
         JButton confirmarEntregadoButton = new JButton("Confirmar Entregado");
         JButton registrarEntregaButton = new JButton("Registrar Entrega");
-        // [ELIMINADO: JButton consultarButton = new JButton("Consultar Paquete");]
+        
         JButton irAVisitantesButton = new JButton("Ir a Visitantes");
         JButton volverButton = new JButton("Volver al Menú Principal");
 
         add(registrarButton);
         add(confirmarEntregadoButton);
         add(registrarEntregaButton);
-        // [ELIMINADO: add(consultarButton);]
+       
         add(irAVisitantesButton);
         add(volverButton);
 
-        // --- ACTIONLISTENER CORREGIDO: Registrar Paquete ---
+        
         registrarButton.addActionListener(e -> {
             JTextField remitenteField = new JTextField();
             JTextField destinatarioField = new JTextField();
@@ -73,13 +73,13 @@ public class VigilantePaqueteFrame extends JFrame {
             }
         });
 
-        // --- El resto de los ActionListeners se mantiene ---
+        
         confirmarEntregadoButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, "Paquete confirmado como entregado. Notificación enviada.");
         });
 
         registrarEntregaButton.addActionListener(e -> {
-            // ... (lógica de registrar entrega) ...
+           
         });
 
         irAVisitantesButton.addActionListener(e -> {

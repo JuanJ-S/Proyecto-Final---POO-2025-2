@@ -56,7 +56,7 @@ public class LoginFrame extends JFrame {
                 if (acceso) {
                     JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso.");
                     dispose(); // Cerrar login
-                    // Saltar directamente al tercer menú basado en rol
+                   
                     switch (rol) {
                         case 1:
                             new AdministradorFrame(idSesion).setVisible(true);
