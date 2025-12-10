@@ -16,14 +16,16 @@ public class VigilanteVisitanteFrame extends JFrame {
 
         JButton registrarButton = new JButton("Notificar Entrante (Registrar Visitante)");
         JButton registrarSalidaButton = new JButton("Registrar Salida");
-        JButton registrarEntregaButton = new JButton("Registrar Entrega");  // Nuevo botón
+        JButton registrarEntregaButton = new JButton("Registrar Entrega");  // Ya estaba
         JButton consultarButton = new JButton("Consultar Visitantes");
+        JButton irAPaquetesButton = new JButton("Ir a Paquetes");  // Nuevo botón
         JButton volverButton = new JButton("Volver al Menú Principal");
 
         add(registrarButton);
         add(registrarSalidaButton);
         add(registrarEntregaButton);
         add(consultarButton);
+        add(irAPaquetesButton);
         add(volverButton);
 
         registrarButton.addActionListener(e -> {
@@ -53,7 +55,7 @@ public class VigilanteVisitanteFrame extends JFrame {
                         JOptionPane.showMessageDialog(null, "Apartamento no encontrado.");
                         return;
                     }
-                    BaseDeDatos.registrarVisitante(idVisitante, nombres, apellidos, idDestino);
+                    BaseDeDatos.registrarVisitante(idVisitante, nombres, apellidos, idDestino);  // Usar método de BaseDeDatos
                     JOptionPane.showMessageDialog(null, "Visitante registrado. Notificación enviada al apartamento.");
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Datos inválidos. Intenta de nuevo.");
@@ -99,6 +101,11 @@ public class VigilanteVisitanteFrame extends JFrame {
             }
         });
 
-        volverButton.addActionListener(e -> dispose());
+        irAPaquetesButton.addActionListener(e -> {
+            dispose();
+            new VigilantePaqueteFrame(idSesion).setVisible(true);
+        });
+
+        volverButton.addActionListener(e -> dispose());  // O ajustar para cerrar sesión
     }
 }

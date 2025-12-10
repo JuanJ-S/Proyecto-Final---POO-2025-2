@@ -1,4 +1,6 @@
 package prototipo.proyectofinal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Administrador extends Usuario implements ConsultarBD{
@@ -65,7 +67,7 @@ public class Administrador extends Usuario implements ConsultarBD{
         idResidente = scanner.nextInt();
         System.out.print("Ingrese el ID de Sesion del residente: ");
         idSesion = scanner.nextInt();
-        BaseDeDatos.registrarResidente(nombres, Apellidos, idResidente, idApto, idSesion);
+        BaseDeDatos.registrarResidente(nombres, apellidos, idResidente, idApto, idSesion);  // Corregido: Apellidos -> apellidos
     }
     
     //Métodos Heredados
@@ -120,6 +122,7 @@ public class Administrador extends Usuario implements ConsultarBD{
         int numero = 0;
         int idApto = 0;
         int opcion = 0;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         System.out.print("Digita la torre del apto: ");
         torre = scanner.nextInt();
         System.out.print("\nDigita el numero del apto: ");
@@ -135,10 +138,9 @@ public class Administrador extends Usuario implements ConsultarBD{
         if(opcion == 1){
             BaseDeDatos.consultarPaquetes(idApto);
         } else if(opcion == 2){
-            String dia = null;
-            System.out.print("Ingresa la fecha que quieres consultar (Año-Mes-Dia): ");
-            dia = scanner.next();
-            BaseDeDatos.consultarPaquetesPorDia(idApto, dia);
+            System.out.print("Ingresa la fecha que quieres consultar (Formato: AAAA-MM-DD): ");  // Corregido: Simplificado a YYYY-MM-DD
+            String dia = scanner.next();  // Corregido: Cambiado a String, sin parseo
+            BaseDeDatos.consultarPaquetesPorDia(idApto, dia);  // Pasa String
         }
     }
     
