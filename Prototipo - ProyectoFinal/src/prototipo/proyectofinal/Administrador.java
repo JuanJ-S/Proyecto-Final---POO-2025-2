@@ -1,6 +1,4 @@
 package prototipo.proyectofinal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Administrador extends Usuario implements ConsultarBD{
@@ -122,7 +120,6 @@ public class Administrador extends Usuario implements ConsultarBD{
         int numero = 0;
         int idApto = 0;
         int opcion = 0;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         System.out.print("Digita la torre del apto: ");
         torre = scanner.nextInt();
         System.out.print("\nDigita el numero del apto: ");
@@ -138,10 +135,9 @@ public class Administrador extends Usuario implements ConsultarBD{
         if(opcion == 1){
             BaseDeDatos.consultarPaquetes(idApto);
         } else if(opcion == 2){
-            LocalDateTime dia = null;
-            System.out.print("Ingresa la fecha que quieres consultar (Formato: AAAA-MM-DD HH:MM:SS): ");
-            String input = scanner.nextLine();
-            dia = LocalDateTime.parse(input, formatter);
+            String dia = null;
+            System.out.print("Ingresa la fecha que quieres consultar (Año-Mes-Dia): ");
+            dia = scanner.next();
             BaseDeDatos.consultarPaquetesPorDia(idApto, dia);
         }
     }
