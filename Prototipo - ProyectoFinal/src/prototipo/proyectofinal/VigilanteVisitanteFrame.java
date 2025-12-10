@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
-import java.time.LocalDateTime;
 
 public class VigilanteVisitanteFrame extends JFrame {
     private int idSesion;
@@ -13,42 +11,78 @@ public class VigilanteVisitanteFrame extends JFrame {
     public VigilanteVisitanteFrame(int idSesion) {
         this.idSesion = idSesion;
         setTitle("Gestión de Visitantes - Vigilante");
-        setSize(400, 300);
-        setLayout(new GridLayout(4, 1));
+        setSize(400, 350);  // Aumentar tamaño para más botones
+        setLayout(new GridLayout(6, 1));  // Cambiar a 6 filas para acomodar nuevos botones
 
-        JButton registrarButton = new JButton("Registrar Visitante");
-        JButton consultarButton = new JButton("Consultar Visitantes");
+        JButton registrarButton = new JButton("Notificar Entrante (Registrar Visitante)");
         JButton registrarSalidaButton = new JButton("Registrar Salida");
+        JButton registrarEntregaButton = new JButton("Registrar Entrega");  // Nuevo botón
+        JButton consultarButton = new JButton("Consultar Visitantes");
         JButton volverButton = new JButton("Volver al Menú Principal");
 
         add(registrarButton);
-        add(consultarButton);
         add(registrarSalidaButton);
+        add(registrarEntregaButton);
+        add(consultarButton);
         add(volverButton);
 
         registrarButton.addActionListener(e -> {
-            // Formulario para registrar visitante usando BaseDeDatos.registrarVisitante
+            // Formulario para registrar visitante, ahora con torre y numero
             JTextField idField = new JTextField();
             JTextField nombreField = new JTextField();
             JTextField apellidoField = new JTextField();
-            JTextField idDestinoField = new JTextField();
+            JTextField torreField = new JTextField();  // Nuevo campo
+            JTextField numeroField = new JTextField();  // Nuevo campo
             Object[] message = {
                 "ID Visitante:", idField,
                 "Nombre:", nombreField,
                 "Apellido:", apellidoField,
-                "ID Destino:", idDestinoField
+                "Torre:", torreField,  // Pedir torre
+                "Número:", numeroField  // Pedir numero
             };
-            int option = JOptionPane.showConfirmDialog(null, message, "Registrar Visitante", JOptionPane.OK_CANCEL_OPTION);
+            int option = JOptionPane.showConfirmDialog(null, message, "Notificar Entrante", JOptionPane.OK_CANCEL_OPTION);
             if (option == JOptionPane.OK_OPTION) {
                 try {
                     int idVisitante = Integer.parseInt(idField.getText());
                     String nombres = nombreField.getText();
                     String apellidos = apellidoField.getText();
-                    int idDestino = Integer.parseInt(idDestinoField.getText());
-                    BaseDeDatos.registrarVisitante(idVisitante, nombres, apellidos, idDestino);  // Usar método de BaseDeDatos
+                    int torre = Integer.parseInt(torreField.getText());
+                    int numero = Integer.parseInt(numeroField.getText());
+                    int idDestino = BaseDeDatos.obtenerIdApto(torre, numero);  // Obtener idDestino
+                    if (idDestino == 0) {
+                        JOptionPane.showMessageDialog(null, "Apartamento no encontrado.");
+                        return;
+                    }
+                    BaseDeDatos.registrarVisitante(idVisitante, nombres, apellidos, idDestino);
                     JOptionPane.showMessageDialog(null, "Visitante registrado. Notificación enviada al apartamento.");
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Datos inválidos. Intenta de nuevo.");
+                }
+            }
+        });
+
+        registrarSalidaButton.addActionListener(e -> {
+            String idVisitanteStr = JOptionPane.showInputDialog("Ingresa el ID del visitante para registrar salida:");
+            if (idVisitanteStr != null) {
+                try {
+                    int idVisitante = Integer.parseInt(idVisitanteStr);
+                    BaseDeDatos.registrarSalida(idVisitante);  // Nuevo método
+                    JOptionPane.showMessageDialog(null, "Salida registrada.");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "ID inválido.");
+                }
+            }
+        });
+
+        registrarEntregaButton.addActionListener(e -> {
+            String idPaqueteStr = JOptionPane.showInputDialog("Ingresa el ID del paquete para registrar entrega:");
+            if (idPaqueteStr != null) {
+                try {
+                    int idPaquete = Integer.parseInt(idPaqueteStr);
+                    BaseDeDatos.registrarEntrega(idPaquete);  // Nuevo método
+                    JOptionPane.showMessageDialog(null, "Entrega registrada.");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "ID inválido.");
                 }
             }
         });
@@ -58,19 +92,11 @@ public class VigilanteVisitanteFrame extends JFrame {
             String[] options = {"Ver Visitantes Activos", "Consultar por Día"};
             int choice = JOptionPane.showOptionDialog(null, "Elige una opción", "Consultar Visitantes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
             if (choice == 0) {
-                // Mostrar tabla de visitantes activos (puedes implementar JTable aquí)
                 JOptionPane.showMessageDialog(null, "Tabla de visitantes activos (implementar JTable aquí).");
             } else {
-                // Consultar por día
                 String dia = JOptionPane.showInputDialog("Ingresa el día (YYYY-MM-DD):");
                 JOptionPane.showMessageDialog(null, "Tabla de visitantes del día " + dia + " (implementar JTable aquí).");
             }
-        });
-
-        registrarSalidaButton.addActionListener(e -> {
-            String documento = JOptionPane.showInputDialog("Ingresa el ID del visitante:");
-            // Lógica para registrar salida (actualizar BD)
-            JOptionPane.showMessageDialog(null, "Salida registrada para ID: " + documento);
         });
 
         volverButton.addActionListener(e -> dispose());
